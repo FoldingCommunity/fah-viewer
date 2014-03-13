@@ -1,0 +1,26 @@
+* Project Leader *
+Dr. Vijay Pande
+Stanford University
+
+* Developer *
+Joseph Coffland
+Cauldron Development LLC
+
+* Testers *
+Bruce Borden, bborden
+Ivo Sarak, Ivoshiee
+Thomas Fourcade, toTOW
+Tim Braun, 7im
+Carl Moudy, ChelseaOilman
+Jean Hunter, susato
+David Richard, RipD
+Charles Richards, ChasR
+Mark Turner, P5-133XL
+Tim Thomas, hrsetrdr
+Andy Van de Walle, Rum@NoV
+Erwin Gies, SandStar
+Anand Bhat, AnandBhat
+Kevin Bernhagen, calxalot
+Charles Oliver, 7up1n
+Syed Mohammad Hussain Abdul Aziz, PantherX
+Jesse Victors, Jesse_V

@@ -1,0 +1,27 @@
+// Loads all the resources needed for the Protein Folding demo
+
+nullTexture sharpTex 0
+colorTexFbo blurFbo1 1
+colorTexFbo blurFbo2 1
+depthTexFbo shadowMapFbo 2
+colorTexFbo normalFbo 1
+
+texture NormalMap 0 SphereNoise.ppm
+
+program genShadowMap genShadowMap.vert genShadowMap.frag
+
+program lighting lighting.vert lighting.frag
+uniform_float distanceScale 0.008
+uniform_float toon 0
+
+program blur blur.vert blur.frag
+uniform_float sampleDist1 0.007
+
+program blur2 blur2.vert blur2.frag
+uniform_float sampleDist2 0.007
+
+program combine combine.vert combine.frag
+uniform_float range 1.0
+uniform_float focus 0.75
+
+program attenuateTexture blur.vert attenuateTexture.frag

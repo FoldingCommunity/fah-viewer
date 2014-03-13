@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FAHViewer
+Exec=/usr/bin/FAHViewer
+TryExec=FAHViewer
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Education;Science;Biology;;
+Comment=Folding@home Client 3D Viewer
+Icon=FAHViewer-64.png

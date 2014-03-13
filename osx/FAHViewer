@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# /usr/bin/FAHViewer
+# this script is used by FAHControl for launching FAHViewer with arguments
+# backwards compatible with old script
+
+# osx 10.6+
+OS_MAJOR="`/usr/bin/uname -r | cut -f1 -d.`"
+if [ "$OS_MAJOR" -ge 10 ]; then
+    open -a FAHViewer --args "$@"
+    exit 0
+fi
+
+# pre-10.6 direct launch if viewer in std place
+# note: HFS is case insensitive, so this will work even for old-named
+# "fahviewer.app"
+EXEC="/Applications/FAHViewer.app/Contents/MacOS/FAHViewer"
+if [ -x "$EXEC" ]; then
+    exec "$EXEC" "$@"
+    exit 0
+fi
+
+show_failure() {
+  osascript <<EOF
+  with timeout of 300 seconds
+    tell app "Finder"
+      activate
+      set Input to display dialog \
+        "FAHViewer missing, moved or not executable, please reinstall." \
+        with icon caution
+    end tell
+  end timeout
+EOF
+  exit 1
+}
+
+# pre-10.6 and FAHViewer is not in std place; try to find one with lsregister
+
+# 10.5 thru 10.7
+LSREG1="/System/Library/Frameworks/CoreServices.framework"
+LSREG1+="/Frameworks/LaunchServices.framework/Support/lsregister"
+# 10.4
+LSREG2="/System/Library/Frameworks/ApplicationServices.framework"
+LSREG2+="/Frameworks/LaunchServices.framework/Support/lsregister"
+
+if [ -x "$LSREG1" ]; then LSREG="$LSREG1"
+elif [ -x "$LSREG2" ]; then LSREG="$LSREG2"
+else
+    echo "ERROR: $0: cannot find lsregister"
+    show_failure
+    exit 1
+fi
+
+declare -a APPS
+
+# first look for apps on boot volume
+APPS=$("$LSREG" -dump |
+    grep --before-context=2 "edu.stanford.folding.fahviewer" |
+    grep -v Volumes | grep -v '\.Trash' | grep path: | grep '\.app' |
+    awk '{print $2}')
+
+# launch first one we find
+# note that this doesn't open the newest version one, like 'open' does
+for P in "${APPS[@]}"; do
+    EXEC="$P/Contents/MacOS/FAHViewer"
+    if [ -x "$EXEC" ]; then
+        exec "$EXEC" "$@"
+        exit 0
+    fi
+done
+
+# didn't find one on boot volume, so let's look on other volumes
+APPS=$("$LSREG" -dump |
+    grep --before-context=2 "edu.stanford.folding.fahviewer" |
+    grep Volumes | grep -v '\.Trash' | grep path: | grep '\.app' |
+    awk '{print $2}')
+
+for P in "${APPS[@]}"; do
+    EXEC="$P/Contents/MacOS/FAHViewer"
+    if [ -x "$EXEC" ]; then
+        exec "$EXEC" "$@"
+        exit 0
+    fi
+done
+
+show_failure
+exit 1
