@@ -2,7 +2,6 @@ fah-viewer
 =========
 
 Folding@home 3D Viewer
-Folding@Home 3D Viewer
 
 The Folding@home viewer allows you to visualize protein folding simulations
 and monitor the status of the simulation work units as they run on your
@@ -11,7 +10,7 @@ Folding@home.
 
 For more information or to report a bug see:
 
-  https:/fah-web.stanford.edu/projects/FAHClient
+  https:/fah.stanford.edu/projects/FAHClient
 
 and:
 

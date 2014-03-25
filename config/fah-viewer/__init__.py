@@ -11,7 +11,6 @@ def configure_deps(conf, withGraphics = True):
     if withGraphics:
         conf.CBConfig('freetype2')
         conf.CBConfig('opengl')
-        conf.CBConfig('glew')
         conf.CBConfig('glut')
 
     # gromacs
@@ -36,7 +35,7 @@ def configure(conf, withGraphics = True):
 def generate(env):
     env.CBAddConfigTest('fah-viewer', configure)
     env.CBAddConfigTest('fah-viewer-deps', configure_deps)
-    env.CBLoadTools('freetype2 opengl glew glut gromacs')
+    env.CBLoadTools('freetype2 opengl glut gromacs')
 
 
 def exists(env):

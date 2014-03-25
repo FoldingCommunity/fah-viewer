@@ -1,45 +1,32 @@
-# Configure system boilerplate
-import os, sys
-sys.path.append(os.environ.get('CONFIG_SCRIPTS_HOME',
-                               '../cbang/config-scripts'))
-import config
+# Setup
+import os
+env = Environment()
+try:
+    env.Tool('config', toolpath = [os.environ.get('CBANG_HOME')])
+except Exception, e:
+    raise Exception, 'CBANG_HOME not set?\n' + str(e)
+
+# Override mostly_static to default True
+env.CBAddVariables(
+    BoolVariable('mostly_static', 'Link most libraries statically', 1))
+
+env.CBLoadTools('compiler cbang dist build_info packager resources fah-viewer')
+conf = env.CBConfigure()
 
 # Version
 version = open('version/version.txt', 'r').read().strip()
 major, minor, revision = version.split('.')
 
-# Override mostly_static to default True
-var = BoolVariable('mostly_static', 'Link most libraries statically', 1)
-
-# Setup
-env = config.make_env(['compiler', 'cbang', 'dist', 'build_info', 'packager',
-                       'osx'], extra_vars = [var])
-
-# Configure
-conf = Configure(env)
-
-# Resources
-config.configure('resources', conf, namespace = 'FAH::Viewer')
-
-# Build Info
-config.configure('build_info', conf, namespace = 'FAH::BuildInfo',
-                 version = version)
-
-# Packaging
-config.configure('dist', conf, version = version)
-config.configure('packager', conf)
-config.configure('run_distutils', conf)
+# Config vars
+env.Replace(PACKAGE_VERSION = version)
+env.Replace(RESOURCES_NS = 'FAH::Viewer')
+env.Replace(BUILD_INFO_NS = 'FAH::BuildInfo')
 
 if not env.GetOption('clean'):
-    # Configure compiler
-    config.configure('compiler', conf)
-
-    # Dependencies
-    deps = config.load_conf_module('viewer', '.')
-    deps.configure_deps(conf)
-
-    # Using CBANG macro namespace
-    env.Append(CPPDEFINES = ['USING_CBANG'])
+    conf.CBConfig('compiler')
+    env.CBDefine('USING_CBANG') # Using CBANG macro namespace
+    conf.CBConfig('fah-viewer-deps')
+    env.CBDefine('GLEW_STATIC')
 
     # Mostly static libraries
     if env.get('mostly_static', 0):
@@ -47,14 +34,46 @@ if not env.GetOption('clean'):
             ignores = ['pthread', 'dl', 'bz2', 'z', 'm', 'glut']
         else: ignores = None
 
-        config.compiler.mostly_static_libs(env, ignores)
+        env.MostlyStaticLibs(ignores)
 
 conf.Finish()
 
-# Viewer
-viewer, libFAHViewer = \
-    SConscript('src/FAHViewer.scons', variant_dir = 'build', duplicate = 0)
+# GLEW
+libGLEW = env.Library('GLEW', 'build/glew/glew.c')
+
+# Source
+subdirs = ['', 'advanced', 'basic', 'io']
+src = []
+for dir in subdirs:
+    src += Glob('src/fah/viewer/' + dir + '/*.cpp')
+
+# Build in 'build'
+import re
+VariantDir('build', 'src')
+src = map(lambda path: re.sub(r'^src/', 'build/', str(path)), src)
+env.AppendUnique(CPPPATH = ['#/build'])
+
+# Resources
+res = env.Resources('build/viewer-resources.cpp', ['#/src/resources/viewer'])
+Precious(res)
+resLib = env.Library('fah-viewer-resources', res)
+Precious(resLib)
+
+
+# Build lib
+lib = env.Library('fah-viewer', src)
+
+
+# Build Info
+info = env.BuildInfo('build/build_info.cpp', [])
+AlwaysBuild(info)
+
+
+# FAHViewer
+viewer = env.Program('#/FAHViewer',
+                     ['build/FAHViewer.cpp', info, lib, resLib, libGLEW]);
 Default(viewer)
+
 
 # Clean
 Clean(viewer, ['build', 'config.log'])
