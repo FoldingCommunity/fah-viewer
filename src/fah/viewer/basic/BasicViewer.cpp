@@ -381,8 +381,7 @@ void BasicViewer::drawInfo(const SimulationInfo &info, const View &view) {
 
   glColor3ub(0x9, 0xa7, 0xb7);
   print(12, 88, "Snapshots:");
-  if (info.project)
-    print(126, 88, view.getFrameDescription());
+  print(126, 88, view.getFrameDescription());
 
   print(12, 66, "Connection:");
   print(126, 66, view.getConnectionStatus());

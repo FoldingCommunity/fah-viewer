@@ -79,7 +79,7 @@ Default(viewer)
 Clean(viewer, ['build', 'config.log'])
 
 # Dist
-docs = ['README', 'ChangeLog', 'copyright']
+docs = ['README.md', 'CHANGELOG.md', 'copyright']
 distfiles = docs + [viewer, 'backgrounds', 'src', 'SConstruct']
 tar = env.TarBZ2Dist('fahviewer', distfiles)
 Alias('dist', tar)

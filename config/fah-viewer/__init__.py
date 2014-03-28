@@ -20,15 +20,11 @@ def configure_deps(conf, withGraphics = True):
 def configure(conf, withGraphics = True):
     env = conf.env
 
-    home = env.CBCheckHome()
-    if home:
-        env.AppendUnique(CPPPATH = [home + '/src'])
-        env.AppendUnique(LIBPATH = [home + '/build'])
-
+    home = conf.CBCheckHome('fah-viewer', inc_suffix = '/src', lib_suffix = '')
     conf.CBConfig('fah-viewer-deps', withGraphics)
 
-    conf.CBRequireLib('FAHViewer')
-    conf.CBRequireLib('FAHViewerResources')
+    conf.CBRequireLib('fah-viewer')
+    conf.CBRequireLib('fah-viewer-resources')
     conf.CBRequireCXXHeader('fah/viewer/SimulationInfo.h')
 
 
