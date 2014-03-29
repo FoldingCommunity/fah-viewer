@@ -24,9 +24,9 @@ env.Replace(BUILD_INFO_NS = 'FAH::BuildInfo')
 
 if not env.GetOption('clean'):
     conf.CBConfig('compiler')
-    env.CBDefine('USING_CBANG') # Using CBANG macro namespace
     conf.CBConfig('fah-viewer-deps')
     env.CBDefine('GLEW_STATIC')
+    env.CBDefine('USING_CBANG') # Using CBANG macro namespace
 
     # Mostly static libraries
     if env.get('mostly_static', 0):
@@ -38,14 +38,15 @@ if not env.GetOption('clean'):
 
 conf.Finish()
 
-# GLEW
-libGLEW = env.Library('GLEW', 'build/glew/glew.c')
 
 # Source
 subdirs = ['', 'advanced', 'basic', 'io']
 src = []
 for dir in subdirs:
     src += Glob('src/fah/viewer/' + dir + '/*.cpp')
+
+# GLEW
+src += ['build/glew/glew.c']
 
 # Build in 'build'
 import re
@@ -71,7 +72,7 @@ AlwaysBuild(info)
 
 # FAHViewer
 viewer = env.Program('#/FAHViewer',
-                     ['build/FAHViewer.cpp', info, lib, resLib, libGLEW]);
+                     ['build/FAHViewer.cpp', info, lib, resLib]);
 Default(viewer)
 
 

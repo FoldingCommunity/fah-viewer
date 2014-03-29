@@ -23,8 +23,8 @@ def configure(conf, withGraphics = True):
     home = conf.CBCheckHome('fah-viewer', inc_suffix = '/src', lib_suffix = '')
     conf.CBConfig('fah-viewer-deps', withGraphics)
 
-    conf.CBRequireLib('fah-viewer')
     conf.CBRequireLib('fah-viewer-resources')
+    conf.CBRequireLib('fah-viewer')
     conf.CBRequireCXXHeader('fah/viewer/SimulationInfo.h')
 
 

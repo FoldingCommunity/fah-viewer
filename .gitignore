@@ -2,25 +2,39 @@
 *.slo
 *.lo
 *.o
+*.obj
 
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+*.lib
 
-# Compiled Python
-*.pyc
-
-# SCons
-.sconf_temp
-.sconsign.dblite
+# Executables
+*.exe
+*.out
+*.app
 
 # Build byproducts
 build
 config.log
 package.txt
+dist.txt
 
+# generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+
+# Compiled python
+*.pyc
+
+# Backup files
+*~
