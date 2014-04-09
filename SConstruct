@@ -15,7 +15,10 @@ env.CBLoadTools('compiler cbang dist build_info packager resources ' +
 conf = env.CBConfigure()
 
 # Version
-version = env.FAHClientVersion()
+try:
+    version = env.FAHClientVersion()
+except:
+    version = '0.0.0'
 
 # Config vars
 env.Replace(RESOURCES_NS = 'FAH::Viewer')
