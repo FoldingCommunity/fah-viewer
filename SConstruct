@@ -82,7 +82,7 @@ Default(viewer)
 Clean(viewer, ['build', 'config.log'])
 
 # Dist
-docs = ['README.md', 'CHANGELOG.md', 'copyright']
+docs = ['README.md', 'CHANGELOG.md', 'LICENSE']
 distfiles = docs + [viewer, 'backgrounds', 'src', 'SConstruct']
 tar = env.TarBZ2Dist('fahviewer', distfiles)
 Alias('dist', tar)
@@ -114,7 +114,7 @@ if 'package' in COMMAND_LINE_TARGETS:
         maintainer = 'Joseph Coffland <joseph@cauldrondevelopment.com>',
         vendor = 'Folding@home',
         url = 'http://folding.stanford.edu/',
-        license = 'copyright',
+        license = 'LICENSE',
         bug_url = 'https://fah-web.stanford.edu/projects/FAHClient/',
         summary = 'Folding@home 3D Simulation Viewer',
         description = description,
