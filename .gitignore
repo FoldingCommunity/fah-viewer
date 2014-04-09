@@ -22,7 +22,6 @@
 
 # Build byproducts
 build
-config.log
 package.txt
 dist.txt
 
@@ -38,3 +37,8 @@ dist.txt
 
 # Backup files
 *~
+
+# Scons
+.sconf_temp
+.sconsign.dblite
+config.log

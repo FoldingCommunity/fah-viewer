@@ -10,15 +10,14 @@ except Exception, e:
 env.CBAddVariables(
     BoolVariable('mostly_static', 'Link most libraries statically', 1))
 
-env.CBLoadTools('compiler cbang dist build_info packager resources fah-viewer')
+env.CBLoadTools('compiler cbang dist build_info packager resources ' +
+                'fah-client-version fah-viewer')
 conf = env.CBConfigure()
 
 # Version
-version = open('version/version.txt', 'r').read().strip()
-major, minor, revision = version.split('.')
+version = env.FAHClientVersion()
 
 # Config vars
-env.Replace(PACKAGE_VERSION = version)
 env.Replace(RESOURCES_NS = 'FAH::Viewer')
 env.Replace(BUILD_INFO_NS = 'FAH::BuildInfo')
 
