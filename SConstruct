@@ -143,15 +143,18 @@ if 'package' in COMMAND_LINE_TARGETS:
 
         app_id = 'edu.stanford.folding.fahviewer',
         app_resources = [['osx/Resources/', '.']],
-        pkg_resources = 'osx/Resources',
         app_signature = '????',
         app_other_info = {'CFBundleIconFile': 'FAHViewer.icns'},
         app_shared = ['backgrounds'],
         app_programs = [str(viewer[0])],
+
+        pkg_resources = 'osx/Resources',
         pkg_files = [['osx/FAHViewer', 'usr/bin/', 0755]],
         pkg_apps = [['FAHViewer.app', 'Folding@home/FAHViewer.app']],
         pkg_target = '10.4',
         pkg_scripts = 'osx/scripts',
+        pkg_distribution = 'osx/distribution.xml',
+        pkg_plist = 'osx/pkg.plist',
         )
 
     AlwaysBuild(pkg)

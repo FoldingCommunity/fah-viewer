@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+  <pkg-ref id="%(pkg_id)s"/>
+  <title>%(summary)s</title>
+  <welcome file="Welcome.rtf"/>
+  <license file="License.rtf"/>
+  <options customize="never" require-scripts="false"/>
+  <choices-outline>
+    <line choice="default"><line choice="%(pkg_id)s"/></line>
+  </choices-outline>
+  <choice id="default"/>
+  <choice id="%(pkg_id)s" visible="false">
+    <pkg-ref id="%(pkg_id)s"/>
+  </choice>
+  <pkg-ref id="%(pkg_id)s" version="0"
+           onConclusion="none">%(package_name)s.pkg</pkg-ref>
+</installer-gui-script>
