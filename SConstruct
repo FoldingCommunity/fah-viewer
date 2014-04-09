@@ -10,7 +10,7 @@ except Exception, e:
 env.CBAddVariables(
     BoolVariable('mostly_static', 'Link most libraries statically', 1))
 
-env.CBLoadTools('compiler cbang dist build_info packager resources osx ' +
+env.CBLoadTools('compiler cbang dist build_info packager resources ' +
                 'fah-client-version fah-viewer')
 conf = env.CBConfigure()
 
