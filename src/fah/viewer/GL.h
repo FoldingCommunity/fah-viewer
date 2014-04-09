@@ -29,7 +29,7 @@
 #ifndef FAH_GL_H
 #define FAH_GL_H
 
-#include <GL/glew.h> // Must be first
+#include <glew/glew.h> // Must be first
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -44,7 +44,8 @@ namespace FAH {
 }
 
 #ifdef __DEBUG
-#define CHECK_GL_ERROR(msg) checkGLError(CBANG_SSTR(__FUNCTION__ << "() " << msg))
+#define CHECK_GL_ERROR(msg) \
+  checkGLError(CBANG_SSTR(__FUNCTION__ << "() " << msg))
 #else
 #define CHECK_GL_ERROR(msg)
 #endif
