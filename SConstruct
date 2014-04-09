@@ -143,7 +143,7 @@ if 'package' in COMMAND_LINE_TARGETS:
 
         app_id = 'edu.stanford.folding.fahviewer',
         app_resources = [['osx/Resources/', '.']],
-        pkg_resources = [['osx/Resources/', '.']],
+        pkg_resources = 'osx/Resources',
         app_signature = '????',
         app_other_info = {'CFBundleIconFile': 'FAHViewer.icns'},
         app_shared = ['backgrounds'],
