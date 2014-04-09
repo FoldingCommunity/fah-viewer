@@ -126,7 +126,7 @@ if 'package' in COMMAND_LINE_TARGETS:
         programs = [str(viewer[0])],
         desktop_menu = ['FAHViewer.desktop'],
         icons = ['images/FAHViewer-64.png', 'images/FAHViewer.icns'],
-        changelog = 'ChangeLog',
+        changelog = 'CHANGELOG.md',
 
         deb_directory = 'debian',
         deb_section = 'science',
