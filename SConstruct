@@ -6,12 +6,13 @@ try:
 except Exception, e:
     raise Exception, 'CBANG_HOME not set?\n' + str(e)
 
+env.CBLoadTools('compiler cbang dist build_info packager resources ' +
+                'fah-client-version fah-viewer')
+
 # Override mostly_static to default True
 env.CBAddVariables(
     BoolVariable('mostly_static', 'Link most libraries statically', 1))
 
-env.CBLoadTools('compiler cbang dist build_info packager resources ' +
-                'fah-client-version fah-viewer')
 conf = env.CBConfigure()
 
 # Version
@@ -30,13 +31,8 @@ if not env.GetOption('clean'):
     env.CBDefine('GLEW_STATIC')
     env.CBDefine('USING_CBANG') # Using CBANG macro namespace
 
-    # Mostly static libraries
-    if env.get('mostly_static', 0):
-        if env['PLATFORM'] == 'posix':
-            ignores = ['pthread', 'dl', 'bz2', 'z', 'm', 'glut']
-        else: ignores = None
-
-        env.MostlyStaticLibs(ignores)
+    if env['PLATFORM'] == 'posix':
+        env.Append(PREFER_DYNAMIC = 'bz2 z m glut'.split())
 
 conf.Finish()
 
