@@ -198,6 +198,7 @@ void Trajectory::shiftIntoBox(Positions &p) {
       double dist;
 
       while (0.75 * box[m][m] < fabs(dist = p[n][m] - p[n - 1][m])) {
+        if (10 * box[m][m] < fabs(dist)) continue; // Ignore unreasonable
         if (0 < dist) for (int d = 0; d <= m; d++) p[n][d] -= box[m][d];
         else for (int d = 0; d <= m; d++) p[n][d] += box[m][d];
       }

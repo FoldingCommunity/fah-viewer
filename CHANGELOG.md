@@ -1,8 +1,8 @@
 # Folding@home 3D Viewer ChangeLog
 
-## v7.5.0
- - Show snapshot for comman line loaded proteins.
- -
+## v7.4.5
+ - Show snapshot for command line loaded proteins.
+ - Don't try to shift atoms which are unreasonably far from center.
 
 ## v7.3.13
  - ESC ends fullscreen mode.  #1067
