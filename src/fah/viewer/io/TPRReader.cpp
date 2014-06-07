@@ -138,9 +138,11 @@ void TPRReader::read(Positions &positions, Topology &topology) {
         topology.add(atom);
 
         // Position
-        positions.push_back(Vector3D(state.x[count][0], state.x[count][1],
-                                     state.x[count][2]) * 10);
+        Vector3D p = Vector3D(state.x[count][0], state.x[count][1],
+                              state.x[count][2]) * 10;
+        positions.push_back(p);
 
+        LOG_DEBUG(5, "TPR: " << j << '/' << atoms.nr << ' ' << p);
         count++;
       }
 

@@ -63,14 +63,15 @@ void Trajectory::add(const SmartPointer<Positions> &positions) {
 
   if (!topology->isEmpty()) {
     if (positions->size() != topology->getAtoms().size())
-      LOG_ERROR("Size of positions " << positions->size()
-                << " does not match topology " << topology->getAtoms().size());
+      LOG_WARNING("Size of positions " << positions->size()
+                  << " does not match topology "
+                  << topology->getAtoms().size());
 
   } else if (!empty()) {
     SmartPointer<Positions> last = back();
     if (positions->size() != last->size())
-      LOG_ERROR("Size of positions " << positions->size()
-                << " does not match trajectory " << last->size());
+      LOG_WARNING("Size of positions " << positions->size()
+                  << " does not match trajectory " << last->size());
   }
 
   shiftIntoBox(*positions);
@@ -205,6 +206,8 @@ void Trajectory::shiftIntoBox(Positions &p) {
     }
 
     offsets[n] = p[n] - orig;
+
+    LOG_DEBUG(5, "SHIFT: " << n << ' ' << p[n] << ' ' << offsets[n]);
   }
 }
 

@@ -117,6 +117,7 @@ bool XTCReader::read(Positions &positions, Topology *topology) {
   unsigned count;
   if (topology) count = topology->getAtoms().size();
   else count = natoms;
+  if (natoms < (int)count) count = natoms;
 
   for (unsigned i = 0; i < count; i++) {
     // Get atom index
@@ -125,9 +126,11 @@ bool XTCReader::read(Positions &positions, Topology *topology) {
     if (!index) index = i;
 
     // Store the position
-    positions.push_back(Vector3D(((rvec *)p->x)[index][0],
-                                 ((rvec *)p->x)[index][1],
-                                 ((rvec *)p->x)[index][2]) * 10);
+    Vector3D pos = Vector3D(((rvec *)p->x)[index][0], ((rvec *)p->x)[index][1],
+                            ((rvec *)p->x)[index][2]) * 10;
+    positions.push_back(pos);
+
+    LOG_DEBUG(5, "XTC: " << i << '/' << count << ' ' << pos);
   }
 
   return true;
