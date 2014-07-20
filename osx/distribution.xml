@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<installer-gui-script minSpecVersion="1">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-script minSpecVersion="1">
   <pkg-ref id="%(pkg_id)s"/>
   <title>%(summary)s</title>
   <welcome file="Welcome.rtf"/>
   <license file="License.rtf"/>
-  <options customize="never" require-scripts="false"/>
+  <options customize="never" hostArchitectures="i386" rootVolumeOnly="true"/>
   <choices-outline>
-    <line choice="default"><line choice="%(pkg_id)s"/></line>
+    <line choice="default"><line choice="choice0"/></line>
   </choices-outline>
   <choice id="default"/>
-  <choice id="%(pkg_id)s" visible="false">
+  <choice id="choice0" visible="false">
     <pkg-ref id="%(pkg_id)s"/>
   </choice>
-  <pkg-ref id="%(pkg_id)s" version="0"
-           onConclusion="none">%(package_name)s.pkg</pkg-ref>
-</installer-gui-script>
+  <pkg-ref auth="Root" id="%(pkg_id)s">%(package_name)s.pkg</pkg-ref>
+</installer-script>
