@@ -95,11 +95,11 @@ void BasicViewer::loadFonts() {
 
   try {
     fontBold = new GLFreeType("Courier_New_Bold.ttf", 16);
-  } CBANG_CATCH_ERROR;
+  } CATCH_ERROR;
 
   try {
     font = new GLFreeType("Courier_New.ttf", 12);
-  } CBANG_CATCH_ERROR;
+  } CATCH_ERROR;
 }
 
 

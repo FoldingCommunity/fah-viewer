@@ -126,7 +126,7 @@ void Client::tryConnect() {
       setTimeout(0.1);
       buffer.clear();
       state = STATE_CONNECTING;
-    } CBANG_CATCH_ERROR;
+    } CATCH_ERROR;
   }
 }
 
@@ -146,7 +146,7 @@ void Client::checkConnect() {
 
       return;
     }
-  } CBANG_CATCH_ERROR;
+  } CATCH_ERROR;
   
   // Some error occured
   reconnect();
@@ -238,7 +238,7 @@ bool Client::readSome() {
 
     default: THROWS("Invalid state");
     }
-  } CBANG_CATCH_ERROR;
+  } CATCH_ERROR;
 
   reconnect();
   return false;
@@ -256,7 +256,7 @@ void Client::processMessage(const char *start, const char *end) {
 
   try {
     handleMessage(msg);
-  } CBANG_CATCH_ERROR;
+  } CATCH_ERROR;
 }
 
 
