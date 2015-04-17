@@ -37,7 +37,6 @@
 #include <cbang/time/TimeInterval.h>
 
 #include <cbang/util/DefaultCatch.h>
-#include <cbang/util/Random.h>
 #include <cbang/util/Resource.h>
 
 #include <cbang/geom/Vector.h>
