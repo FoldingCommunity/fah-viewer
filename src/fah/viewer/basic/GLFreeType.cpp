@@ -212,8 +212,8 @@ void GLFreeType::displayList(FT_Face face, unsigned char ch) {
 
   // Use our helper function to get the widths of the bitmap data that
   // we will need in order to create our texture.
-  unsigned width = next_pow_2(bitmap.width);
-  unsigned height = next_pow_2(bitmap.rows);
+  int width = next_pow_2(bitmap.width);
+  int height = next_pow_2(bitmap.rows);
 
   // Allocate memory for the texture data.
   GLubyte *expanded_data = new GLubyte[2 * width * height];
@@ -225,11 +225,11 @@ void GLFreeType::displayList(FT_Face face, unsigned char ch) {
   // We use the ?: operator so that value which we use will be 0 if we
   // are in the padding zone, and whatever is the the Freetype bitmap
   // otherwise.
-  for (unsigned j = 0; j < height; j++)
-    for (unsigned i = 0; i < width; i++) {
+  for (int j = 0; j < height; j++)
+    for (int i = 0; i < width; i++) {
       expanded_data[2 * (i + j * width)] = 255;
       expanded_data[2 * (i + j * width) + 1] =
-        (i >= bitmap.width || j >= bitmap.rows) ?
+        (i >= (int)bitmap.width || j >= (int)bitmap.rows) ?
         0 : bitmap.buffer[i + bitmap.width * j];
     }
 
