@@ -38,11 +38,11 @@ using namespace FAH;
 
 
 void XYZWriter::write(const Positions &positions, const Topology &topology) {
-  ostream &stream = sync.getStream();
+  ostream &stream = sink.getStream();
 
   const Topology::atoms_t &atoms = topology.getAtoms();
 
-  stream << atoms.size() << '\t' << sync.getName() << '\n';
+  stream << atoms.size() << '\t' << sink.getName() << '\n';
 
   for (unsigned i = 0; i < atoms.size(); i++)
     stream << (i + 1) << '\t' << atoms[i].getType() << '\t'
