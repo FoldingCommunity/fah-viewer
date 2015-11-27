@@ -41,7 +41,7 @@ namespace FAH {
     const cb::OutputSink sink;
 
   public:
-    XYZWriter(const cb::OutputSink &sink) : sink(sync) {}
+    XYZWriter(const cb::OutputSink &sink) : sink(sink) {}
 
     void write(const Positions &positions, const Topology &topology);
     void write(const Protein &protein);
