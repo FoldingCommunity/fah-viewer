@@ -6,13 +6,7 @@ and monitor the status of the simulation work units as they run on your
 computer.  Installing and running the viewer is not necessary to run
 Folding@home.
 
-For more information or to report a bug see:
-
-  https:/fah.stanford.edu/projects/FAHClient/
-
-and:
-
-  http://folding.stanford.edu/
+For more information see: http://folding.stanford.edu/
 
 # Building from Source
 To build FAHViewer from source you must first build C! and fah-gromacs.  This
