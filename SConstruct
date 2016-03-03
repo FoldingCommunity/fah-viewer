@@ -96,7 +96,7 @@ description += short_description
 
 if 'package' in COMMAND_LINE_TARGETS:
     # Don't package Windows here
-    if env['PLATFORM'] == 'win32':
+    if env['PLATFORM'] == 'win32' or int(env.get('cross_mingw', 0)):
         f = open('package.txt', 'w');
         f.write('none');
         f.close()
