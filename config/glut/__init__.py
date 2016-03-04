@@ -13,7 +13,7 @@ def configure(conf):
 
     conf.CBRequireHeader('GL/glut.h')
 
-    if env['PLATFORM'] == 'win32':
+    if env['PLATFORM'] == 'win32' or int(env.get('cross_mingw', 0)):
         if not conf.CBCheckLib('freeglut_static'):
             conf.CBRequireLib('glut32')
 
