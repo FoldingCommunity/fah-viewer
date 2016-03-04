@@ -69,6 +69,7 @@ AlwaysBuild(info)
 
 
 # FAHViewer
+if int(env.get('cross_mingw', 0)): env.Append(LINKFLAGS = ['-mwindows'])
 viewer = env.Program('#/FAHViewer',
                      ['build/FAHViewer.cpp', info, lib, resLib]);
 Default(viewer)
