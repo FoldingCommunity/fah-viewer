@@ -32,10 +32,6 @@
 
 #include <fah/viewer/GL.h>
 
-// This causes windows to not automatically create a console
-#if defined(_WIN32) && !defined(DEBUG)
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
-#endif
 
 int main(int argc, char *argv[]) {
   // Init GLUT

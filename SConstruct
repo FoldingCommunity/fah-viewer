@@ -34,6 +34,8 @@ if not env.GetOption('clean'):
     if env['PLATFORM'] == 'posix':
         env.Append(PREFER_DYNAMIC = 'bz2 z m glut'.split())
 
+    env.CBConfConsole() # Build console app on Windows
+
 conf.Finish()
 
 
@@ -159,4 +161,3 @@ if 'package' in COMMAND_LINE_TARGETS:
 
     with open('package-description.txt', 'w') as f:
         f.write(short_description.strip())
-
