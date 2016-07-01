@@ -3,7 +3,7 @@
                      This file is part of the FAHViewer.
 
            The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2014, Stanford University
+                 Copyright (c) 2003-2016, Stanford University
                              All rights reserved.
 
     This program is free software; you can redistribute it and/or modify
@@ -123,7 +123,7 @@ ViewerApp::ViewerApp() :
 
   // TODO move this stuff out to the build system
   info.add(name, "Website", "http://folding.stanford.edu/", true);
-  info.add(name, "Copyright", "(c) 2009-2014 Stanford University");
+  info.add(name, "Copyright", "(c) 2009-2016 Stanford University");
   info.add(name, "Author", "Joseph Coffland <joseph@cauldrondevelopment.com>");
 }
 
