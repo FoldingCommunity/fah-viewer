@@ -21,7 +21,7 @@ def configure(conf, withGraphics = True):
     env = conf.env
 
     home = conf.CBCheckHome('fah-viewer', inc_suffix = '/src', lib_suffix = '')
-    conf.CBConfig('fah-viewer-deps', withGraphics)
+    conf.CBConfig('fah-viewer-deps', withGraphics = withGraphics)
 
     conf.CBRequireLib('fah-viewer-resources')
     conf.CBRequireLib('fah-viewer')
