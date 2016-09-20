@@ -163,7 +163,7 @@ SmartPointer<JSON::Value> Topology::getJSON() const {
   list = new JSON::List;
   for (bonds_t::const_iterator it = bonds.begin(); it != bonds.end(); it++)
     list->push_back(it->getJSON());
-  dict->insert("bonds", list);  
+  dict->insert("bonds", list);
 
   return dict;
 }
@@ -179,6 +179,8 @@ void Topology::loadJSON(const JSON::Value &value, float scale) {
       if (atoms.getList(i).getString(0) == "UNKNOWN") break;
       this->atoms.push_back(Atom(atoms.getList(i), scale));
     }
+
+    LOG_DEBUG(3, "Read " << atoms.size() << " JSON atoms");
   }
 
   // Bonds
@@ -189,5 +191,7 @@ void Topology::loadJSON(const JSON::Value &value, float scale) {
           atoms.size() <= bonds.getList(i).getNumber(1)) continue;
       this->bonds.push_back(Bond(bonds.getList(i)));
     }
+
+    LOG_DEBUG(3, "Read " << bonds.size() << " JSON bonds");
   }
 }

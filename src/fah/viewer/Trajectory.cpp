@@ -133,6 +133,8 @@ void Trajectory::readTRN(const string &filename, bool onlyNewFrames) {
 
 
 void Trajectory::readJSON(const string &filename) {
+  LOG_DEBUG(3, "Reading JSON file " << filename);
+
   JSON::Reader reader(filename);
   JSON::ValuePtr data = reader.parse();
 

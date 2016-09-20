@@ -42,8 +42,8 @@ using namespace FAH;
 
 Atom::Atom(const string &type, float charge, float radius, float mass,
            unsigned number) :
-  type(type), number(number ? number : numberFromName(type)), charge(charge),
-  radius(radius), mass(mass), index(0) {
+  type(type), number(number ? number : numberFromName(type)),
+  charge(charge), radius(radius), mass(mass), index(0) {
   if (!charge) this->charge = chargeFromNumber(number);
   if (radius <= 0) this->radius = radiusFromNumber(number);
   if (mass <= 0) this->mass = massFromNumber(number);

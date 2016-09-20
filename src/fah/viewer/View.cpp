@@ -37,6 +37,7 @@
 #include <cbang/log/Logger.h>
 #include <cbang/time/Time.h>
 #include <cbang/os/SystemUtilities.h>
+#include <cbang/util/DefaultCatch.h>
 
 using namespace std;
 using namespace cb;
@@ -44,7 +45,7 @@ using namespace FAH;
 
 
 View::View(cb::Options &options) :
-  options(options), width(800), height(600), zoom(1.05), basic(false),
+  options(options), width(800), height(600), zoom(1.05), basic(true),
   wiggle(true), cycle(true), blur(true), modeNumber(4), slot(0), pause(false),
   rotation(0, 0, 0, 0.999), degreesPerSec(0, 10), lastFrame(0), currentFrame(0),
   totalFrames(0), interpSteps(9), fps(8), forward(true), profile("default"),
@@ -63,6 +64,7 @@ View::View(cb::Options &options) :
   options.add("tpr", "Load Gromacs .tpr file");
   options.add("xtc", "Load Gromacs .xtc file");
   options.add("trn", "Load Gromacs .trr or .trx file");
+  options.add("json", "Load JSON topology and positions from directory");
 
   options.add("recompute-bonds", "Recompute bonds from expected bond lengths"
               )->setDefault(false);
@@ -148,12 +150,14 @@ void View::initView(const vector<string> &inputs) {
     for (unsigned i = 0; i < inputs.size(); i++) {
       string ext = SystemUtilities::extension(inputs[i]);
 
-      if (ext == "xyz") trajectory->readXYZ(inputs[i]);
-      else if (ext == "tpr") trajectory->readTPR(inputs[i]);
-      else if (ext == "xtc") trajectory->readXTC(inputs[i]);
-      else if (ext == "trn") trajectory->readTRN(inputs[i]);
-      else if (ext == "json") trajectory->readJSON(inputs[i]);
-      else THROWS("Input file with unknown extension '" << inputs[i] << "'");
+      try {
+        if (ext == "xyz") trajectory->readXYZ(inputs[i]);
+        else if (ext == "tpr") trajectory->readTPR(inputs[i]);
+        else if (ext == "xtc") trajectory->readXTC(inputs[i]);
+        else if (ext == "trn") trajectory->readTRN(inputs[i]);
+        else if (ext == "json") trajectory->readJSON(inputs[i]);
+        else THROWS("Input file with unknown extension '" << inputs[i] << "'");
+      } CATCH_ERROR;
     }
 
     if (options["xyz"].hasValue()) trajectory->readXYZ(options["xyz"]);
@@ -171,7 +175,7 @@ void View::initView(const vector<string> &inputs) {
 
   else if (client.isNull() && options["connect"].hasValue() &&
            String::toLower(options["connect"].toString()) != "false") {
-    
+
     IPAddress addr(options["connect"]);
     if (!addr.getPort()) addr.setPort(36330); // The default port
     if (addr.getIP()) client = createClient(addr);
