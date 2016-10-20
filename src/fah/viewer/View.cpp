@@ -59,12 +59,7 @@ View::View(cb::Options &options) :
   options.addTarget("password", password, "A password for accessing the remote "
                     "client")->setObscured();
   options.addTarget("slot", slot, "Slot on the client to view");
-  options.add("xyz", "An XYZ file to read and display");
   options.add("test", "Load test data")->setDefault(true);
-  options.add("tpr", "Load Gromacs .tpr file");
-  options.add("xtc", "Load Gromacs .xtc file");
-  options.add("trn", "Load Gromacs .trr or .trx file");
-  options.add("json", "Load JSON topology and positions from directory");
 
   options.add("recompute-bonds", "Recompute bonds from expected bond lengths"
               )->setDefault(false);
@@ -143,27 +138,16 @@ void View::initView(const vector<string> &inputs) {
   trajectory = new Trajectory(true, true, interpSteps);
 
   // Load data
-  if (!inputs.empty() || options["xyz"].hasValue() ||
-      options["tpr"].hasValue() || options["xtc"].hasValue() ||
-      options["trn"].hasValue()) {
-
+  if (!inputs.empty()) {
     for (unsigned i = 0; i < inputs.size(); i++) {
       string ext = SystemUtilities::extension(inputs[i]);
 
       try {
         if (ext == "xyz") trajectory->readXYZ(inputs[i]);
-        else if (ext == "tpr") trajectory->readTPR(inputs[i]);
-        else if (ext == "xtc") trajectory->readXTC(inputs[i]);
-        else if (ext == "trn") trajectory->readTRN(inputs[i]);
         else if (ext == "json") trajectory->readJSON(inputs[i]);
         else THROWS("Input file with unknown extension '" << inputs[i] << "'");
       } CATCH_ERROR;
     }
-
-    if (options["xyz"].hasValue()) trajectory->readXYZ(options["xyz"]);
-    if (options["tpr"].hasValue()) trajectory->readTPR(options["tpr"]);
-    if (options["xtc"].hasValue()) trajectory->readXTC(options["xtc"], true);
-    if (options["trn"].hasValue()) trajectory->readTRN(options["trn"], true);
 
     // Make fake topology if none was loaded
     trajectory->ensureTopology();

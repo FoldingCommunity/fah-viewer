@@ -3,6 +3,8 @@
 ## v7.4.16
  - Read JSON files from command line.
  - Use basic mode by default.
+ - Removed support for reading Gromacs format files .trn, .tpr, .xtc.
+ - Removed ``--xyz <file>`` option.  Not needed.
 
 ## v7.4.5
  - Show snapshot for command line loaded proteins.

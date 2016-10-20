@@ -13,9 +13,6 @@ def configure_deps(conf, withGraphics = True):
         conf.CBConfig('opengl')
         conf.CBConfig('glut')
 
-    # gromacs
-    conf.CBConfig('fah-gromacs')
-
 
 def configure(conf, withGraphics = True):
     env = conf.env
@@ -31,7 +28,7 @@ def configure(conf, withGraphics = True):
 def generate(env):
     env.CBAddConfigTest('fah-viewer', configure)
     env.CBAddConfigTest('fah-viewer-deps', configure_deps)
-    env.CBLoadTools('freetype2 opengl glut fah-gromacs')
+    env.CBLoadTools('freetype2 opengl glut')
 
 
 def exists(env):

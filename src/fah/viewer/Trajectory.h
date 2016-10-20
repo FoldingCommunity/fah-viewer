@@ -66,9 +66,6 @@ namespace FAH {
     void add(const cb::SmartPointer<Positions> &positions);
 
     void readXYZ(const std::string &filename);
-    void readTPR(const std::string &filename);
-    void readXTC(const std::string &filename, bool onlyNewFrames = false);
-    void readTRN(const std::string &filename, bool onlyNewFrames = false);
     void readJSON(const std::string &filename);
 
     void ensureTopology();
@@ -90,4 +87,3 @@ namespace FAH {
 }
 
 #endif // FAH_TRAJECTORY_H
-

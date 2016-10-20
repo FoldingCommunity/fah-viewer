@@ -29,9 +29,6 @@
 #include "Trajectory.h"
 
 #include <fah/viewer/io/XYZReader.h>
-#include <fah/viewer/io/TPRReader.h>
-#include <fah/viewer/io/XTCReader.h>
-#include <fah/viewer/io/TRNReader.h>
 
 #include <cbang/Exception.h>
 #include <cbang/Math.h>
@@ -91,44 +88,6 @@ void Trajectory::readXYZ(const string &filename) {
   XYZReader(filename).read(*positions, topology.get());
   topology->setTS();
   add(positions);
-}
-
-
-void Trajectory::readTPR(const string &filename) {
-  SmartPointer<Positions> positions = new Positions;
-  TPRReader(filename).read(*positions, *topology);
-  topology->setTS();
-  add(positions);
-}
-
-
-void Trajectory::readXTC(const string &filename, bool onlyNewFrames) {
-  XTCReader reader(filename);
-
-  for (unsigned count = 0; true; count++) {
-    SmartPointer<Positions> positions = new Positions;
-    if (!reader.read(*positions, topology->isEmpty() ? 0 : topology.get()))
-      break;
-    if (!onlyNewFrames || size() <= count) {
-      add(positions);
-      onlyNewFrames = false;
-    }
-  }
-}
-
-
-void Trajectory::readTRN(const string &filename, bool onlyNewFrames) {
-  TRNReader reader(filename);
-
-  for (unsigned count = 0; true; count++) {
-    SmartPointer<Positions> positions = new Positions;
-    if (!reader.read(*positions, topology->isEmpty() ? 0 : topology.get()))
-      break;
-    if (!onlyNewFrames || size() <= count) {
-      add(positions);
-      onlyNewFrames = false;
-    }
-  }
 }
 
 
