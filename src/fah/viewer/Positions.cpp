@@ -28,6 +28,8 @@
 
 #include "Positions.h"
 
+#include <cbang/log/Logger.h>
+
 using namespace std;
 using namespace cb;
 using namespace FAH;
@@ -96,6 +98,8 @@ void Positions::loadJSON(const JSON::Value &value, float scale) {
     push_back(Vector3D(coord.getNumber(0), coord.getNumber(1),
                        coord.getNumber(2)) * scale);
   }
+
+  LOG_DEBUG(3, "Read " << size() << " JSON positions");
 
   init();
 }

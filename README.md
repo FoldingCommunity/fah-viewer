@@ -9,8 +9,8 @@ Folding@home.
 For more information see: http://folding.stanford.edu/
 
 # Building from Source
-To build FAHViewer from source you must first build C! and fah-gromacs.  This
-section outlines the recommended procedure.
+To build FAHViewer from source you must first build C!.  This section outlines
+the recommended procedure.
 
 ## Install Git & Scons
 If you don't already have them install both Git and SCons:
@@ -28,7 +28,6 @@ First create a build directory then get all the source repositories from GitHub:
     mkdir build
     cd build
     git clone https://github.com/CauldronDevelopmentLLC/cbang.git
-    git clone https://github.com/FoldingAtHome/fah-gromacs.git
     git clone https://github.com/FoldingAtHome/fah-viewer.git
 
 ## Setup the Environment
@@ -39,7 +38,6 @@ In Windows:
 
     set BUILD_ROOT=%HOMEPATH%\path\to\build
     set CBANG_HOME=%BUILD_ROOT%\cbang
-    set FAH_GROMACS_HOME=%BUILD_ROOT%\fah-gromacs
     set FAH_VIEWER_HOME=%BUILD_ROOT%\fah-viewer
 
 Replace *%HOMEPATH%\path\to\build* with the correct path.
@@ -48,7 +46,6 @@ In Linux or OS-X:
 
     BUILD_ROOT=$HOME/path/to/build
     export CBANG_HOME=$BUILD_ROOT/cbang
-    export FAH_GROMACS_HOME=$BUILD_ROOT/fah-gromacs
     export FAH_VIEWER_HOME=$BUILD_ROOT/fah-viewer
 
 Replace *$HOME/path/to/build* with the correct path.
@@ -72,7 +69,6 @@ See the link below for instructions:
 ## Build FAHViewer
 Once you've got the code, setup your environment and built C!:
 
-    scons -C $FAH_GROMACS_HOME
     scons -C $FAH_VIEWER_HOME
 
 If all goes well this will produce *FAHViewer* (or *FAHViewer.exe* in Windows)
