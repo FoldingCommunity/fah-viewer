@@ -22,8 +22,11 @@
 
 # Build byproducts
 build
-package.txt
+package*.txt
 dist.txt
+/*.pkg
+/*.app.zip
+/FAHViewer
 
 # generic files to ignore
 *~

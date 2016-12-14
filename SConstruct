@@ -148,7 +148,6 @@ if 'package' in COMMAND_LINE_TARGETS:
         app_programs = [str(viewer[0])],
 
         pkg_resources = 'osx/Resources',
-        pkg_files = [['osx/FAHViewer', 'usr/bin/', 0755]],
         pkg_apps = [['FAHViewer.app', 'Folding@home/FAHViewer.app']],
         pkg_target = '10.6',
         pkg_scripts = 'osx/scripts',
