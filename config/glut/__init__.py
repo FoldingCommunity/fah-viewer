@@ -13,7 +13,7 @@ def configure(conf):
 
     conf.CBRequireHeader('GL/glut.h')
 
-    if not (conf.CBCheckLib('glut') or conf.CBCheckLib('glut') or
+    if not (conf.CBCheckLib('glut') or conf.CBCheckLib('glut32') or
             conf.CBCheckLib('freeglut_static') or conf.CBCheckLib('freeglut')):
         raise 'Missing glut'
 
