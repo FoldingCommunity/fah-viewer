@@ -55,6 +55,11 @@ using namespace cb;
 using namespace FAH;
 
 
+#define CLIENT_CATCH_ERROR \
+  catch (const Socket::EndOfStream &) {} \
+  CATCH_ERROR
+
+
 Client::Client(const IPAddress &addr, unsigned slot, SimulationInfo &info,
                Trajectory &trajectory, const string &password) :
   addr(addr), password(password), slot(slot), currentSlotID(-1),
@@ -118,7 +123,7 @@ void Client::reconnect() {
 
 
 void Client::tryConnect() {
-  if (lastConnect + 15 < Time::now()) {
+  if (lastConnect + 15 < Time::now())
     try {
       lastConnect = Time::now();
       setBlocking(false);
@@ -126,8 +131,7 @@ void Client::tryConnect() {
       setTimeout(0.1);
       buffer.clear();
       state = STATE_CONNECTING;
-    } CATCH_ERROR;
-  }
+    } CLIENT_CATCH_ERROR;
 }
 
 
@@ -146,8 +150,8 @@ void Client::checkConnect() {
 
       return;
     }
-  } CATCH_ERROR;
-  
+  } CLIENT_CATCH_ERROR;
+
   // Some error occured
   reconnect();
 }
@@ -238,7 +242,7 @@ bool Client::readSome() {
 
     default: THROWS("Invalid state");
     }
-  } CATCH_ERROR;
+  } CLIENT_CATCH_ERROR;
 
   reconnect();
   return false;
@@ -256,7 +260,7 @@ void Client::processMessage(const char *start, const char *end) {
 
   try {
     handleMessage(msg);
-  } CATCH_ERROR;
+  } CLIENT_CATCH_ERROR;
 }
 
 

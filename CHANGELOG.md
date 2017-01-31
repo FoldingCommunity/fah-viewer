@@ -1,5 +1,8 @@
 # Folding@home 3D Viewer ChangeLog
 
+## v7.4.17
+ - Fixed ``terminate called. . .'cb::Socket::EndOfStream'`` on client exit.
+
 ## v7.4.16
  - Read JSON files from command line.
  - Use basic mode by default.
