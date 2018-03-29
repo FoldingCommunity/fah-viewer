@@ -206,7 +206,7 @@ void Trajectory::alignToLast(Positions &p) {
     for (unsigned l = 0; l < 2; l++) {
       uint8_t r = Random::instance().rand<uint8_t>();
       Vector3D v(!(r & 1), !(r & 2), !(r & 4));
-      AxisAngleD a(angle * l ? -1 : 1, v.normalize());
+      AxisAngleD a(angle * (l ? -1 : 1), v.normalize());
 
       // Rotate
       Positions tmp(p);
