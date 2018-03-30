@@ -32,7 +32,7 @@ if not env.GetOption('clean'):
     env.CBDefine('USING_CBANG') # Using CBANG macro namespace
 
     if env['PLATFORM'] == 'posix':
-        env.Append(PREFER_DYNAMIC = 'bz2 z m glut'.split())
+        env.Append(PREFER_DYNAMIC = 'bz2 z m glu glut'.split())
 
     env.CBConfConsole() # Build console app on Windows
 
@@ -130,14 +130,15 @@ if 'package' in COMMAND_LINE_TARGETS:
         deb_directory = 'debian',
         deb_section = 'science',
         deb_depends = 'libx11-6, libc6, bzip2, zlib1g, libexpat1, ' + \
-            'libgl1-mesa-glx, freeglut3',
+            'libgl1-mesa-glx, libglu1, freeglut3',
         deb_priority = 'optional',
         deb_recommends = 'fahclient (=%s), fahcontrol (=%s)' % (
             version, version),
 
         rpm_license = 'Restricted',
         rpm_group = 'Applications/Internet',
-        rpm_requires = 'libX11, mesa-libGL, expat, bzip2-libs',
+        rpm_requires = 'libX11, mesa-libGL, expat, bzip2-libs, freeglut, ' + \
+            'mesa-libGLU',
         rpm_build = 'rpm/build',
 
         app_id = 'edu.stanford.folding.fahviewer',
