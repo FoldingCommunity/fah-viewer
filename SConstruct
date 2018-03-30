@@ -32,7 +32,7 @@ if not env.GetOption('clean'):
     env.CBDefine('USING_CBANG') # Using CBANG macro namespace
 
     if env['PLATFORM'] == 'posix':
-        env.Append(PREFER_DYNAMIC = 'bz2 z m glu glut'.split())
+        env.Append(PREFER_DYNAMIC = 'bz2 z m GLU glut'.split())
 
     env.CBConfConsole() # Build console app on Windows
 
