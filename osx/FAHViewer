@@ -55,7 +55,7 @@ declare -a APPS
 
 # first look for apps on boot volume
 APPS=$("$LSREG" -dump |
-    grep --before-context=2 "edu.stanford.folding.fahviewer" |
+    grep --before-context=2 "org.foldingathome.fahviewer" |
     grep -v Volumes | grep -v '\.Trash' | grep path: | grep '\.app' |
     awk '{print $2}')
 
@@ -71,7 +71,7 @@ done
 
 # didn't find one on boot volume, so let's look on other volumes
 APPS=$("$LSREG" -dump |
-    grep --before-context=2 "edu.stanford.folding.fahviewer" |
+    grep --before-context=2 "org.foldingathome.fahviewer" |
     grep Volumes | grep -v '\.Trash' | grep path: | grep '\.app' |
     awk '{print $2}')
 
