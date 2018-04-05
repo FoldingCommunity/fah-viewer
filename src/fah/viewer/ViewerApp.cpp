@@ -122,8 +122,8 @@ ViewerApp::ViewerApp() :
   info.add("System", "OpenGL Render", (const char *)glGetString(GL_RENDERER));
 
   // TODO move this stuff out to the build system
-  info.add(name, "Website", "http://folding.stanford.edu/", true);
-  info.add(name, "Copyright", "(c) 2009-2016 Stanford University");
+  info.add(name, "Website", "http://foldingathome.org/", true);
+  info.add(name, "Copyright", "(c) 2009-2018 Stanford University");
   info.add(name, "Author", "Joseph Coffland <joseph@cauldrondevelopment.com>");
 }
 
