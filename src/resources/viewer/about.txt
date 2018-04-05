@@ -12,8 +12,8 @@ To request additional help please visit:
 
   http://foldingforum.org/
 
-Website: http://folding.stanford.edu/
+Website: https://foldingathome.org/
 
-Copyright (C) 2010-2016 Stanford University
+Copyright (C) 2010-2018 FoldingAtHome.org 
 
 The Folding@home viewer and client software were developed in collaboration with Stanford University by:
