@@ -89,7 +89,7 @@ AlwaysBuild(tar)
 
 description = \
 '''Folding@home is a distributed computing project using volunteered
-computer resources run by Pandegroup of Stanford University.
+computer resources.
 '''
 short_description = '''
 This package contains the 3D simulation viewer.  It can connect to
