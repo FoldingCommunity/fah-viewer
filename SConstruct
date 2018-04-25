@@ -112,7 +112,7 @@ if 'package' in COMMAND_LINE_TARGETS:
         version = version,
         maintainer = 'Joseph Coffland <joseph@cauldrondevelopment.com>',
         vendor = 'Folding@home',
-        url = 'http://foldingathome.org/',
+        url = 'https://foldingathome.org/',
         license = 'LICENSE',
         bug_url = 'https://foldingathome.org/',
         summary = 'Folding@home 3D Simulation Viewer',
