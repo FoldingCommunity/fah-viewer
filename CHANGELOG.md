@@ -1,4 +1,8 @@
-# Folding@home 3D Viewer ChangeLog
+Folding@home 3D Viewer ChangeLog
+================================
+
+## v7.5.1
+ - OSX installer updates. @kbernhagen
 
 ## v7.4.17
  - Fixed ``terminate called. . .'cb::Socket::EndOfStream'`` on client exit.
