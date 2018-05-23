@@ -59,4 +59,3 @@ namespace FAH {
 }
 
 #endif // FAH_VIEWER_H
-

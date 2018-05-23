@@ -242,7 +242,7 @@ Vector3D ViewerApp::findBallVector(unsigned px, unsigned py) {
 
   double z2 = 1.0 - x * x - y * y;
   double z = 0 < z2 ? sqrt(z2) : 0; // Clamp to 0
-  
+
   return Vector3D(x, y, z).normalize();
 }
 
