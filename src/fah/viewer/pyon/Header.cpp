@@ -27,58 +27,32 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#include "Header.h"
 
-#include "Atom.h"
-#include "Bond.h"
+#include <cbang/String.h>
 
-#include <fah/viewer/pyon/Object.h>
-
-#include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
-
-#include <iostream>
-#include <vector>
+using namespace std;
+using namespace cb;
+using namespace FAH::PyON;
 
 
-namespace FAH {
-  class Positions;
+Header::Header(const string &type, const char *magic, uint32_t version) :
+  magic(magic), version(version), type(type), valid(!type.empty()) {}
 
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
 
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
-
-  public:
-    bool isEmpty() const {return atoms.empty();}
-
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
-
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
-
-    void validate(const Positions &positions) const;
-    void clear();
-
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+void Header::write(ostream &stream) const {
+  stream << magic << ' ' << version << ' ' << type;
 }
 
-#endif // FAH_TOPOLOGY_H
 
+void Header::read(istream &stream) {
+  vector<string> tokens;
+  String::tokenizeLine(stream, tokens);
+
+  if (tokens.size() != 3 || tokens[0] != magic) valid = false;
+  else {
+    version = String::parseU32(tokens[1]);
+    type = tokens[2];
+    valid = true;
+  }
+}

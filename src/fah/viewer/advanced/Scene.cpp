@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -69,7 +70,7 @@ Uniform *Scene::findUniform(const string &name, uniform_t type) {
     if ((*it)->name == name && ((*it)->type == type || type == SAMPLE_UNKNOWN))
       return it->get();
 
-  THROWS("Uniform " << name << " not found");
+  THROW("Uniform " << name << " not found");
 }
 
 
@@ -83,7 +84,7 @@ void Scene::loadData(const string &filename) {
   recentProgramHandle = -1;
 
   const Resource *data = FAH::Viewer::resource0.find(filename);
-  if (!data) THROWS("Could not find resource: " << filename);
+  if (!data) THROW("Could not find resource: " << filename);
 
   string s(data->getData(), data->getLength());
   istringstream in(s);
@@ -115,7 +116,7 @@ void Scene::loadData(const string &filename) {
       else if (item == "vec3") {type = SAMPLE_FLOAT_VEC3; count = 3;}
       else if (item == "vec4") {type = SAMPLE_FLOAT_VEC4; count = 4;}
       else if (item == "mat4") {type = SAMPLE_FLOAT_MAT4; count = 16;}
-      else THROWS("Invalid uniform type " << item);
+      else THROW("Invalid uniform type " << item);
 
       for (int i = 0; i < count; i++) line >> val[i];
 
@@ -162,7 +163,7 @@ void Scene::loadData(const string &filename) {
           uniform->update(0);
         }
 
-      } else THROWS("Failed to load texture: " << val);
+      } else THROW("Failed to load texture: " << val);
 
     } else if (item == "nullTexture" || item == "colorTexFbo" ||
                item == "depthTexFbo") {
@@ -210,7 +211,7 @@ void Scene::loadData(const string &filename) {
     } else if (item.empty() || item[0] == '/' || item[0] == '#') {
       // Either an empty line or a comment
 
-    } else THROWS("Unsupported keyword in uniform file:" << item);
+    } else THROW("Unsupported keyword in uniform file:" << item);
 
     CHECK_GL_ERROR("Uniform " << key << "caused ");
 

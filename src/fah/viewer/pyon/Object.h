@@ -27,58 +27,37 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
-
-#include "Atom.h"
-#include "Bond.h"
-
-#include <fah/viewer/pyon/Object.h>
+#pragma once
 
 #include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
+#include <cbang/json/Value.h>
 
 #include <iostream>
-#include <vector>
 
 
 namespace FAH {
-  class Positions;
+  namespace PyON {
+    class Object {
+    public:
+      virtual ~Object() {}
 
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
+      virtual const char *getPyONType() const = 0;
+      virtual cb::SmartPointer<cb::JSON::Value> getJSON() const = 0;
+      virtual void loadJSON(const cb::JSON::Value &value) = 0;
 
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
+      virtual void write(std::ostream &stream) const;
+      virtual void read(std::istream &stream);
+    };
 
-  public:
-    bool isEmpty() const {return atoms.empty();}
 
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
+    static inline
+    std::ostream &operator<<(std::ostream &stream, const Object &obj) {
+      obj.write(stream); return stream;
+    }
 
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
-
-    void validate(const Positions &positions) const;
-    void clear();
-
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+    static inline
+    std::istream &operator>>(std::istream &stream, Object &obj) {
+      obj.read(stream); return stream;
+    }
+  }
 }
-
-#endif // FAH_TOPOLOGY_H
-

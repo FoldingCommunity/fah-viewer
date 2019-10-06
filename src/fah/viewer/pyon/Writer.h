@@ -27,58 +27,53 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#pragma once
 
-#include "Atom.h"
-#include "Bond.h"
-
-#include <fah/viewer/pyon/Object.h>
-
-#include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
-
-#include <iostream>
-#include <vector>
+#include <cbang/json/Writer.h>
 
 
 namespace FAH {
-  class Positions;
+  namespace PyON {
+    class Writer : public cb::JSON::Writer {
+      /***
+       * The differences between JSON (Javascript Object Notation) mode and
+       * Python mode are as follows:
+       *
+       *                       |  JSON                |  Python
+       *-----------------------------------------------------------------
+       * Boolean Literals      |  'true' & 'false'    |  'True' & 'False'
+       * Empty set literal     |  'null'              |  'None'
+       * Trailing comma        |  not allowed         |  allowed
+       * Single quoted strings |  not allowed         |  allowed
+       * Unquoted names        |  not allowed         |  allowed
+       *
+       * Python also allows other forms of escaped strings.
+       * Also note that Javascript is more permissive than JSON.
+       * See http://www.json.org/ for more info.
+       */
 
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
+    public:
+      Writer(std::ostream &stream, unsigned level = 0, bool compact = false) :
+        cb::JSON::Writer(stream, level, compact) {}
 
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
 
-  public:
-    bool isEmpty() const {return atoms.empty();}
+      // From cb::JSON::Writer
+      void writeNull() {
+        NullSink::writeNull();
+        stream << "None";
+      }
 
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
 
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
+      void writeBoolean(bool value) {
+        NullSink::writeBoolean(value);
+        stream << (value ? "True" : "False");
+      }
 
-    void validate(const Positions &positions) const;
-    void clear();
 
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+      void write(const std::string &value) {
+        NullSink::write(value);
+        stream << '"' << escape(value, "\\x%02x") << '"';
+      }
+    };
+  }
 }
-
-#endif // FAH_TOPOLOGY_H
-

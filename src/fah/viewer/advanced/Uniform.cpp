@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -75,7 +76,7 @@ void Uniform::setLocation(unsigned program) {
   attachedProgram = program;
   location = glGetUniformLocation(program, name.c_str());
   if (location == -1)
-    THROWS("Location " << name << " not found for program id " << program);
+    THROW("Location " << name << " not found for program id " << program);
 }
 
 
@@ -115,7 +116,7 @@ void Uniform::update(float *vals) {
 
   case SAMPLE_PROGRAM: break;
 
-  default: THROWS("Invalid Uniform type: " << type);
+  default: THROW("Invalid Uniform type: " << type);
   }
 }
 
@@ -131,7 +132,7 @@ void Uniform::link(const string uniform) {
 
 
 void Uniform::bindTexture(int width, int height) {
-  if (!textureHandle) THROWS("Uniform " << name << " is not a texture");
+  if (!textureHandle) THROW("Uniform " << name << " is not a texture");
 
   link(name);
 
@@ -154,7 +155,7 @@ void Uniform::bindTexture(int width, int height) {
 
 void Uniform::bindFBO(int width, int height) {
   if (!textureHandle || !fboHandle)
-    THROWS("Uniform " << name << " is not an FBO");
+    THROW("Uniform " << name << " is not an FBO");
 
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fboHandle);
 
@@ -211,7 +212,7 @@ unsigned Uniform::loadProgram(const string &vertShader,
   int linkResult = 0;
   glGetProgramiv(progHandle, GL_LINK_STATUS, &linkResult);
 
-  if (!linkResult) THROWS("Failed to link program object: " << name
+  if (!linkResult) THROW("Failed to link program object: " << name
                           << ": " << getShaderInfoLog(progHandle));
 
   return progHandle;
@@ -228,7 +229,7 @@ unsigned Uniform::loadProgram(const string &vertShader,
  */
 unsigned Uniform::loadShader(const string &filename, unsigned type) {
   const Resource *data = FAH::Viewer::resource0.find(filename);
-  if (!data) THROWS("Failed to find shader object: " << filename);
+  if (!data) THROW("Failed to find shader object: " << filename);
 
   const char *source = (char *)data->getData();
 
@@ -243,7 +244,7 @@ unsigned Uniform::loadShader(const string &filename, unsigned type) {
   // Check for link success
   int compileResult = 0;
   glGetShaderiv(handle, GL_COMPILE_STATUS, &compileResult);
-  if (!compileResult) THROWS("Failed to compile shader: " << filename << ": "
+  if (!compileResult) THROW("Failed to compile shader: " << filename << ": "
                              << getShaderInfoLog(handle));
 
   // Attach to the program

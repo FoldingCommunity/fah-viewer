@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -52,24 +53,24 @@ Atom::Atom(const string &type, float charge, float radius, float mass,
 
 float Atom::chargeFromNumber(unsigned number) {
   switch (number) {
-  case HYDROGEN: return  0.370; break;
-  case CARBON: return -0.119; break;
-  case NITROGEN: return -0.333; break;
-  case OXYGEN: return -0.380; break;
-  case SULFUR: return -0.470; break;
-  default:  return  0.370; break; // ???
+  case HYDROGEN: return  0.370;
+  case CARBON:   return -0.119;
+  case NITROGEN: return -0.333;
+  case OXYGEN:   return -0.380;
+  case SULFUR:   return -0.470;
+  default:       return  0.370; // ???
   }
 }
 
 
 float Atom::radiusFromNumber(unsigned number) {
   switch (number) {
-  case HYDROGEN: return 1.09; break;
-  case CARBON: return 1.70; break;
-  case NITROGEN: return 1.55; break;
-  case OXYGEN: return 1.52; break;
-  case SULFUR: return 1.80; break;
-  default:  return 1.00; break; // ???
+  case HYDROGEN: return 1.09;
+  case CARBON:   return 1.70;
+  case NITROGEN: return 1.55;
+  case OXYGEN:   return 1.52;
+  case SULFUR:   return 1.80;
+  default:       return 1.00; // ???
   }
 }
 
@@ -78,11 +79,11 @@ float Atom::massFromNumber(unsigned number) {
   // TODO This isn't quite right
   switch (number) {
   case HYDROGEN: return 1.00794;
-  case CARBON: return 12.0107;
+  case CARBON:   return 12.0107;
   case NITROGEN: return 14.0067;
-  case OXYGEN: return 15.9994;
-  case SULFUR: return 32.0650;
-  default: return 100; // Assume a heavy atom
+  case OXYGEN:   return 15.9994;
+  case SULFUR:   return 32.0650;
+  default:       return 100; // Assume a heavy atom
   }
 }
 
@@ -96,7 +97,7 @@ void Atom::setDataFromNumber(unsigned number) {
 }
 
 unsigned Atom::numberFromName(const string &name) {
-  if (name.empty()) THROWS("Atom name cannot be empty");
+  if (name.empty()) THROW("Atom name cannot be empty");
 
   switch (toupper(name[0])) {
   case 'H': return HYDROGEN;
@@ -144,7 +145,7 @@ double Atom::averageBondLength(const Atom &atom) const {
 
 
 SmartPointer<JSON::Value> Atom::getJSON() const {
-  SmartPointer<JSON::List> list = new JSON::List;
+  SmartPointer<JSON::Value> list = new JSON::List;
 
   list->append(type);
   list->append(charge);
@@ -158,7 +159,7 @@ SmartPointer<JSON::Value> Atom::getJSON() const {
 
 void Atom::loadJSON(const JSON::Value &value, float scale) {
   if (0 < value.size()) type = value.getString(0);
-  else THROWS("Atom expected list of at least length 1");
+  else THROW("Atom expected list of at least length 1");
   if (String::toUpper(type) == "UNKNOWN") type = "?";
 
   if (1 < value.size()) charge = (float)value.getNumber(1);

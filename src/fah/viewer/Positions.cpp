@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -74,14 +75,14 @@ void Positions::translateToCenterOfMass() {
 
 
 SmartPointer<JSON::Value> Positions::getJSON() const {
-  SmartPointer<JSON::List> list = new JSON::List;
+  SmartPointer<JSON::Value> list = new JSON::List;
 
   for (const_iterator it = begin(); it != end(); it++) {
-    SmartPointer<JSON::List> coord = new JSON::List;
+    SmartPointer<JSON::Value> coord = new JSON::List;
     coord->append(it->x());
     coord->append(it->y());
     coord->append(it->z());
-    list->push_back(coord);
+    list->append(coord);
   }
 
   return list;
@@ -92,8 +93,8 @@ void Positions::loadJSON(const JSON::Value &value, float scale) {
   clear();
 
   for (unsigned i = 0; i < value.size(); i++) {
-    const JSON::List &coord = value.getList(i);
-    if (coord.size() != 3) THROWS("Position expected list of length 3");
+    auto &coord = value.getList(i);
+    if (coord.size() != 3) THROW("Position expected list of length 3");
 
     push_back(Vector3D(coord.getNumber(0), coord.getNumber(1),
                        coord.getNumber(2)) * scale);

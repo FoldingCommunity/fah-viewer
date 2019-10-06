@@ -1,4 +1,4 @@
-Folding@home 3D Viewer ChangeLog
+Folding@home 3D Viewer Changelog
 ================================
 
 ## v7.5.1

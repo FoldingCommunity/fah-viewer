@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -50,7 +51,7 @@ using namespace FAH;
 
 void Topology::validate(const Positions &positions) const {
   if (positions.size() != atoms.size())
-    THROWS("Number of positions (" << positions.size() << ") and atoms ("
+    THROW("Number of positions (" << positions.size() << ") and atoms ("
            << atoms.size() << ") do not agree");
 }
 
@@ -151,18 +152,18 @@ void Topology::findBonds(const Positions &positions) {
 
 
 SmartPointer<JSON::Value> Topology::getJSON() const {
-  SmartPointer<JSON::Dict> dict = new JSON::Dict;
+  SmartPointer<JSON::Value> dict = new JSON::Dict;
 
   // Atoms
-  SmartPointer<JSON::List> list = new JSON::List;
+  SmartPointer<JSON::Value> list = new JSON::List;
   for (atoms_t::const_iterator it = atoms.begin(); it != atoms.end(); it++)
-    list->push_back(it->getJSON());
+    list->append(it->getJSON());
   dict->insert("atoms", list);
 
   // Bonds
   list = new JSON::List;
   for (bonds_t::const_iterator it = bonds.begin(); it != bonds.end(); it++)
-    list->push_back(it->getJSON());
+    list->append(it->getJSON());
   dict->insert("bonds", list);
 
   return dict;
@@ -174,7 +175,7 @@ void Topology::loadJSON(const JSON::Value &value, float scale) {
 
   // Atoms
   if (value.has("atoms")) {
-    const JSON::List &atoms = value.getList("atoms");
+    auto &atoms = value.getList("atoms");
     for (unsigned i = 0; i < atoms.size(); i++) {
       if (atoms.getList(i).getString(0) == "UNKNOWN") break;
       this->atoms.push_back(Atom(atoms.getList(i), scale));
@@ -185,7 +186,7 @@ void Topology::loadJSON(const JSON::Value &value, float scale) {
 
   // Bonds
   if (value.has("bonds")) {
-    const JSON::List &bonds = value.getList("bonds");
+    auto &bonds = value.getList("bonds");
     for (unsigned i = 0; i < bonds.size(); i++) {
       if (atoms.size() <= bonds.getList(i).getNumber(0) ||
           atoms.size() <= bonds.getList(i).getNumber(1)) continue;

@@ -27,58 +27,47 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#pragma once
 
-#include "Atom.h"
-#include "Bond.h"
-
-#include <fah/viewer/pyon/Object.h>
-
-#include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
+#include <cbang/StdTypes.h>
 
 #include <iostream>
-#include <vector>
+#include <string>
+
+#define FAH_PYON_MAGIC "PyON"
+#define FAH_PYON_VERSION 1
 
 
 namespace FAH {
-  class Positions;
+  namespace PyON {
+    class Header {
+      const char *magic;
+      uint32_t version;
+      std::string type;
+      bool valid;
 
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
+    public:
+      Header(const std::string &type = std::string(),
+             const char *magic = FAH_PYON_MAGIC,
+             uint32_t version = FAH_PYON_VERSION);
 
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
+      const char *getMagic() const {return magic;}
+      uint32_t getVersion() const {return version;}
+      const std::string &getType() const {return type;}
+      bool isValid() const {return valid;}
 
-  public:
-    bool isEmpty() const {return atoms.empty();}
+      void write(std::ostream &stream) const;
+      void read(std::istream &stream);
+    };
 
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
+    static inline
+    std::ostream &operator<<(std::ostream &stream, const Header &header) {
+      header.write(stream); return stream;
+    }
 
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
-
-    void validate(const Positions &positions) const;
-    void clear();
-
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+    static inline
+    std::istream &operator>>(std::istream &stream, Header &header) {
+      header.read(stream); return stream;
+    }
+  }
 }
-
-#endif // FAH_TOPOLOGY_H
-

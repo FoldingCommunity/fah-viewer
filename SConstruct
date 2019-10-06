@@ -40,7 +40,7 @@ conf.Finish()
 
 
 # Source
-subdirs = ['', 'advanced', 'basic', 'io']
+subdirs = ['', 'advanced', 'basic', 'io', 'pyon']
 src = []
 for dir in subdirs:
     src += Glob('src/fah/viewer/' + dir + '/*.cpp')

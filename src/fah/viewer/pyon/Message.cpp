@@ -27,58 +27,26 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#include "Message.h"
+#include "PyON.h"
 
-#include "Atom.h"
-#include "Bond.h"
+#include <cbang/json/Reader.h>
 
-#include <fah/viewer/pyon/Object.h>
-
-#include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
-
-#include <iostream>
-#include <vector>
+using namespace std;
+using namespace cb;
+using namespace FAH::PyON;
 
 
-namespace FAH {
-  class Positions;
-
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
-
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
-
-  public:
-    bool isEmpty() const {return atoms.empty();}
-
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
-
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
-
-    void validate(const Positions &positions) const;
-    void clear();
-
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+void Message::write(ostream &stream) const {
+  Header::write(stream);
+  stream << '\n' << PyON(*value) << "\n---\n";
 }
 
-#endif // FAH_TOPOLOGY_H
 
+void Message::read(istream &stream) {
+  Header::read(stream);
+  if (isValid()) {
+    JSON::Reader reader(stream);
+    value = reader.parse();
+  }
+}

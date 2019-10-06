@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -49,7 +50,7 @@ void XYZReader::read(Positions &positions, Topology *topology) {
 
   // Read header line
   stream.getline(line, 1024);
-  if (stream.fail()) THROWS("Failed to read XYZ");
+  if (stream.fail()) THROW("Failed to read XYZ");
 
   // Get atom count
   String::tokenize(line, tokens);
@@ -71,7 +72,7 @@ void XYZReader::read(Positions &positions, Topology *topology) {
     String::tokenize(line, tokens);
 
     if (tokens.size() < 1 || !isdigit(tokens[0][0])) continue;
-    if (tokens.size() < 5) THROWS("Invalid XYZ file at line: " << lineNum);
+    if (tokens.size() < 5) THROW("Invalid XYZ file at line: " << lineNum);
 
     if (topology) {
       Atom atom(tokens[1]);
@@ -88,5 +89,5 @@ void XYZReader::read(Positions &positions, Topology *topology) {
 
   positions.init();
 
-  if (count) THROWS("Failed reading XYZ, expected " << count << " more atoms");
+  if (count) THROW("Failed reading XYZ, expected " << count << " more atoms");
 }

@@ -1,28 +1,29 @@
 /******************************************************************************\
 
-                     This file is part of the FAHViewer.
+                       This file is part of the FAHViewer.
 
-           The FAHViewer displays 3D views of Folding@home proteins.
-                 Copyright (c) 2003-2016, Stanford University
-                             All rights reserved.
+            The FAHViewer displays 3D views of Folding@home proteins.
+                    Copyright (c) 2016-2019, foldingathome.org
+                   Copyright (c) 2003-2016, Stanford University
+                               All rights reserved.
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+       This program is free software; you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+        the Free Software Foundation; either version 2 of the License, or
+                       (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+         This program is distributed in the hope that it will be useful,
+          but WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                   GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along
-    with this program; if not, write to the Free Software Foundation, Inc.,
-    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+     You should have received a copy of the GNU General Public License along
+     with this program; if not, write to the Free Software Foundation, Inc.,
+           51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-                For information regarding this software email:
-                               Joseph Coffland
-                        joseph@cauldrondevelopment.com
+                  For information regarding this software email:
+                                 Joseph Coffland
+                          joseph@cauldrondevelopment.com
 
 \******************************************************************************/
 
@@ -150,15 +151,15 @@ int ViewerApp::init(int argc, char *argv[]) {
   string render = Info::instance().get("System", "OpenGL Render");
   if (!force) {
     if (render == "xxx" || render == "xxx")
-      THROWS("Your GPU has been blacklisted due to system crashes when running "
+      THROW("Your GPU has been blacklisted due to system crashes when running "
              "this program");
   }
 
   GLenum err = glewInit();
-  if (err != GLEW_OK) THROWS("Initializing GLEW: " << glewGetErrorString(err));
+  if (err != GLEW_OK) THROW("Initializing GLEW: " << glewGetErrorString(err));
 
   if (!GLEW_VERSION_1_1 && !force)
-    THROWS("Need at least OpenGL 1.1 to run this application");
+    THROW("Need at least OpenGL 1.1 to run this application");
 
   if (!getBasic() && !GLEW_VERSION_2_0 && !force) {
     LOG_WARNING("Need at least OpenGL 2.0 for non-basic mode.  You may need "

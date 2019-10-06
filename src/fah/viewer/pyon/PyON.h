@@ -27,58 +27,31 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#pragma once
 
-#include "Atom.h"
-#include "Bond.h"
+#include "Writer.h"
 
-#include <fah/viewer/pyon/Object.h>
-
-#include <cbang/SmartPointer.h>
-#include <cbang/geom/Rectangle.h>
-#include <cbang/time/TimeStamp.h>
-
-#include <iostream>
-#include <vector>
+#include <cbang/json/Value.h>
 
 
 namespace FAH {
-  class Positions;
+  namespace PyON {
+    class PyON {
+    public:
+      cb::JSON::Value &value;
+      unsigned level;
+      bool compact;
 
-  class Topology : public PyON::Object, public cb::TimeStamp {
-  public:
-    typedef std::vector<Atom> atoms_t;
-    typedef std::vector<Bond> bonds_t;
+      PyON(cb::JSON::Value &value, unsigned level = 0, bool compact = false) :
+        value(value), level(level), compact(compact) {}
+    };
 
-  protected:
-    atoms_t atoms;
-    bonds_t bonds;
 
-  public:
-    bool isEmpty() const {return atoms.empty();}
-
-    const atoms_t &getAtoms() const {return atoms;}
-    const bonds_t &getBonds() const {return bonds;}
-
-    void add(const Atom &atom) {atoms.push_back(atom);}
-    void add(const Bond &bond) {bonds.push_back(bond);}
-
-    void validate(const Positions &positions) const;
-    void clear();
-
-    unsigned findBonds(std::vector<unsigned> &bondCounts,
-                       const Positions &positions);
-    void findBonds(const Positions &positions);
-
-    // From PyONObject
-    const char *getPyONType() const {return "topology";}
-    cb::SmartPointer<cb::JSON::Value> getJSON() const;
-    void loadJSON(const cb::JSON::Value &value) {loadJSON(value, 1);}
-
-    void loadJSON(const cb::JSON::Value &value, float scale);
-  };
+    static inline
+    std::ostream &operator<<(std::ostream &stream, const PyON &pyon) {
+      Writer writer(stream, pyon.level, pyon.compact);
+      pyon.value.write(writer);
+      return stream;
+    }
+  }
 }
-
-#endif // FAH_TOPOLOGY_H
-
