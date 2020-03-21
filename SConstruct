@@ -51,7 +51,7 @@ src += ['build/glew/glew.c']
 # Build in 'build'
 import re
 VariantDir('build', 'src')
-src = map(lambda path: re.sub(r'^src/', 'build/', str(path)), src)
+src = list(map(lambda path: re.sub(r'^src/', 'build/', str(path)), src))
 env.AppendUnique(CPPPATH = ['#/build'])
 
 # Resources
