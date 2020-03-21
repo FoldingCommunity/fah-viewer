@@ -128,6 +128,22 @@ If a build fails, SCons will usually create a file called *config.log*.  If you
 look towards the end of the file you can often see exactly what failed.  When
 reporting build problems it is a good idea to include this file in the report.
 
+### C! and 64-bit Windows
+C! targets 32-bit Windows by default. You can confirm by checking the start of
+the C! compiler output for the following lines (specifically the `Arch` line):
+
+    scons: Reading SConscript files ...
+       Compiler: cl (msvc)
+       Platform: win32
+           Mode: msvc
+           Arch: x86
+
+To override `Arch`, set the following environment variable:
+
+    set TARGET_ARCH=amd64
+
+and then recompile C!.
+
 ### Resetting SCons
 Sometimes SCons get's messed up.  This can happen if it is interrupted during
 the configuration process.  You can delete SCons' data and start again with
