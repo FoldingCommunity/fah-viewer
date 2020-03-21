@@ -28,6 +28,7 @@ First create a build directory then get all the source repositories from GitHub:
     mkdir build
     cd build
     git clone https://github.com/CauldronDevelopmentLLC/cbang.git
+    git clone https://github.com/FoldingAtHome/fah-client-version.git
     git clone https://github.com/FoldingAtHome/fah-viewer.git
 
 ## Get the Dependencies
@@ -68,6 +69,7 @@ In Windows:
 
     set BUILD_ROOT=%HOMEPATH%\path\to\build
     set CBANG_HOME=%BUILD_ROOT%\cbang
+    set FAH_CLIENT_VERSION_HOME=%BUILD_ROOT%\fah-client-version
     set FAH_VIEWER_HOME=%BUILD_ROOT%\fah-viewer
     set FREETYPE2_INCLUDE=%BUILD_ROOT%\freetype-windows-binaries\include
     set FREETYPE2_LIBPATH=%BUILD_ROOT%\freetype-windows-binaries\win64
@@ -80,6 +82,7 @@ In Linux or OS-X:
 
     BUILD_ROOT=$HOME/path/to/build
     export CBANG_HOME=$BUILD_ROOT/cbang
+    export FAH_CLIENT_VERSION_HOME=$BUILD_ROOT/fah-client-version
     export FAH_VIEWER_HOME=$BUILD_ROOT/fah-viewer
 
 Replace *$HOME/path/to/build* with the correct path.
