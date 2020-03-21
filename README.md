@@ -30,6 +30,32 @@ First create a build directory then get all the source repositories from GitHub:
     git clone https://github.com/CauldronDevelopmentLLC/cbang.git
     git clone https://github.com/FoldingAtHome/fah-viewer.git
 
+## Get the Dependencies
+
+You will need the `freetype` and `freeglut` libraries.
+
+### Windows
+
+Fetch the pre-compiled `freetype` binaries for Windows from GitHub:
+
+    git clone https://github.com/ubawurinna/freetype-windows-binaries.git
+
+#### 64-bit Windows
+
+Download the pre-compiled `freeglut` binaries from
+[MSYS2](https://packages.msys2.org/package/mingw-w64-x86_64-freeglut):
+
+- http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-freeglut-3.2.1-1-any.pkg.tar.xz
+
+Extract `mingw-w64-x86_64-freeglut-3.2.1-1-any.pkg.tar.xz` and rename the
+resulting `mingw64` folder to `freeglut`.
+
+Finally, rename the `freeglut` libraries from the MinGW convention to the MSVC
+convention, so that SCons will find them:
+
+- Rename `freeglut\lib\libfreeglut.dll.a` to `freeglut\lib\glut32.lib`
+- Rename `freeglut\lib\libfreeglut_static.a` to `freeglut\lib\freeglut_static.lib`
+
 ## Setup the Environment
 In the *build* directory setup some environment variables which will allow
 the build systems to find each other.
@@ -39,6 +65,10 @@ In Windows:
     set BUILD_ROOT=%HOMEPATH%\path\to\build
     set CBANG_HOME=%BUILD_ROOT%\cbang
     set FAH_VIEWER_HOME=%BUILD_ROOT%\fah-viewer
+    set FREETYPE2_INCLUDE=%BUILD_ROOT%\freetype-windows-binaries\include
+    set FREETYPE2_LIBPATH=%BUILD_ROOT%\freetype-windows-binaries\win64
+    set GLUT_INCLUDE=%BUILD_ROOT%\freeglut\include
+    set GLUT_LIBPATH=%BUILD_ROOT%\freeglut\lib
 
 Replace *%HOMEPATH%\path\to\build* with the correct path.
 
