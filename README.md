@@ -96,6 +96,11 @@ See the link below for instructions:
 
   https://github.com/CauldronDevelopmentLLC/cbang#prerequisites
 
+Note that you do not require all the modules and dependencies from C! to build
+FAHViewer. The following C! build options should work:
+
+    scons with_openssl=no disable_local=libevent
+
 ## Build FAHViewer
 Once you've got the code, setup your environment and built C!:
 
