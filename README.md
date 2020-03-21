@@ -34,6 +34,10 @@ First create a build directory then get all the source repositories from GitHub:
 
 You will need the `freetype` and `freeglut` libraries.
 
+### Debian / Ubuntu
+
+    sudo apt install libfreetype6-dev freeglut3-dev
+
 ### Windows
 
 Fetch the pre-compiled `freetype` binaries for Windows from GitHub:
