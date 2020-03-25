@@ -31,7 +31,7 @@
 
 #include "TestData.h"
 
-#ifndef __linux__
+#ifndef _WIN32
 #include "wtypes.h"
 #endif
 
@@ -58,10 +58,7 @@ View::View(cb::Options &options) :
   showLogos(true), showHelp(false), showAbout(false), showButtons(true),
   connectionStatus("None") {
 
-  #ifdef __linux__
-    width=800;
-    height=600;
-  #else
+  #ifdef _WIN32
     RECT desktop;
     // Returns available screen size without taskbar
     const HWND hDesktop = GetDesktopWindow();
@@ -70,6 +67,9 @@ View::View(cb::Options &options) :
       width=800;
       height=600;
     }
+  #else
+    width=800;
+    height=600;
   #endif
 
   // Add options
