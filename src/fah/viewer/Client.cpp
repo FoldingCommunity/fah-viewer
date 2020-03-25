@@ -269,9 +269,17 @@ void Client::processMessage(const char *start, const char *end) {
 void Client::handleMessage(const PyON::Message &msg) {
   if (msg.getType() == "slots") {
     auto &list = msg.get()->getList();
+    has_loadable_slot = false;
+    has_running_gpu_slot = false;
 
-    for (unsigned i = 0; i < list.size(); i++)
+    for (unsigned i = 0; i < list.size(); i++) {
       slots.push_back(String::parseU64(list.getDict(i)["id"]->getString()));
+      if (list.getDict(i)["status"]->getString() == "RUNNING")
+        if ((list.getDict(i)["description"]->getString()).substr(0,3) == "cpu")
+          has_loadable_slot = true;
+        else if((list.getDict(i)["description"]->getString()).substr(0,3) == "gpu")
+          has_running_gpu_slot = true;
+    }
 
     if (!slots.empty()) {
       slot %= slots.size();
@@ -279,8 +287,7 @@ void Client::handleMessage(const PyON::Message &msg) {
         currentSlotID = slots[slot];
 
         string cmd =
-          "updates add 2 5 $(simulation-info @SLOT@)\n"
-          "updates add 3 5 $(trajectory @SLOT@)\n";
+            "updates add 2 5 $(simulation-info @SLOT@)\n";
 
         if (command.find(cmd) == string::npos) command += cmd;
         sendCommands(cmd);
@@ -294,11 +301,35 @@ void Client::handleMessage(const PyON::Message &msg) {
     trajectory.setTopology(topology);
     waitingForUpdate = false;
 
-  } else if (msg.getType() == "positions") {
+  } else if (msg.getType() == "positions") {      
     SmartPointer<Positions> positions = new Positions;
-    positions->loadJSON(*msg.get());
-    trajectory.add(positions);
+    positions->loadJSON(*msg.get());   
+    trajectory.add(positions);               
 
-  } else if (msg.getType() == "simulation-info")
-    info.loadJSON(*msg.get());
+  } else if (msg.getType() == "simulation-info") {
+      const JSON::Value& value = *msg.get();
+      auto& dict = value.getDict();    
+      uint32_t coreType = (uint32_t)dict["core_type"]->getNumber();   
+
+      switch (coreType) {
+      case 34:
+          info.loadJSON(*msg.get());
+      case 0:          
+          if (!setSlot(slot + 1))
+              if (slot)
+                  setSlot(slot - 1);
+          break;
+      default:
+          if (info.coreType == 0) {
+              string cmd =
+                  "updates add 3 5 $(trajectory @SLOT@)\n";
+
+              if (command.find(cmd) == string::npos) command += cmd;
+              sendCommands(cmd);
+          }
+          info.loadJSON(*msg.get());
+          if (has_running_gpu_slot) has_loadable_slot = true;
+          break;
+      }
+  }
 }
