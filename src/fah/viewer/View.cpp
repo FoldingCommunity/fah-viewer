@@ -31,7 +31,7 @@
 
 #include "TestData.h"
 
-#ifndef _WIN32
+#ifdef _WIN32
 #include "wtypes.h"
 #endif
 
