@@ -30,7 +30,10 @@
 #include "View.h"
 
 #include "TestData.h"
+
+#ifndef __linux__
 #include "wtypes.h"
+#endif
 
 #include <fah/viewer/advanced/AdvancedViewer.h>
 #include <fah/viewer/basic/BasicViewer.h>
