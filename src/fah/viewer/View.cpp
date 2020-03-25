@@ -55,14 +55,19 @@ View::View(cb::Options &options) :
   showLogos(true), showHelp(false), showAbout(false), showButtons(true),
   connectionStatus("None") {
 
-  RECT desktop;
-  // Returns available screen size without taskbar
-  const HWND hDesktop = GetDesktopWindow();
-  GetWindowRect(hDesktop, &desktop);
-  if (desktop.bottom <= 768 || desktop.right <= 1024) {
+  #ifdef __linux__
     width=800;
     height=600;
-  }
+  #else
+    RECT desktop;
+    // Returns available screen size without taskbar
+    const HWND hDesktop = GetDesktopWindow();
+    GetWindowRect(hDesktop, &desktop);
+    if (desktop.bottom <= 768 || desktop.right <= 1024) {
+      width=800;
+      height=600;
+    }
+  #endif
 
   // Add options
   options.add("connect", "An address and port to connect to in the form: "
