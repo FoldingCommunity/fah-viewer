@@ -65,6 +65,8 @@ namespace FAH {
 
   private:
     state_t state;
+    bool has_loadable_slot = false;
+    bool has_running_gpu_slot = false;
     uint64_t lastConnect;
     uint64_t lastData;
     bool waitingForUpdate;
@@ -87,6 +89,7 @@ namespace FAH {
     void setCommand(const std::string &command) {this->command = command;}
 
     bool isConnected() const {return STATE_CONNECTING < state;}
+    bool hasLoadableSlot() const {return has_loadable_slot;}
     state_t getState() const {return state;}
 
     bool setSlot(unsigned slot);

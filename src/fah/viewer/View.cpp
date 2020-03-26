@@ -31,6 +31,10 @@
 
 #include "TestData.h"
 
+#ifdef _WIN32
+#include "wtypes.h"
+#endif
+
 #include <fah/viewer/advanced/AdvancedViewer.h>
 #include <fah/viewer/basic/BasicViewer.h>
 
@@ -46,13 +50,27 @@ using namespace FAH;
 
 
 View::View(cb::Options &options) :
-  options(options), width(800), height(600), zoom(1.05), basic(true),
+  options(options), width(1024), height(768), zoom(1.05), basic(true),
   wiggle(true), cycle(true), blur(true), modeNumber(4), slot(0), pause(false),
-  rotation(0, 0, 0, 0.999), degreesPerSec(0, 10), lastFrame(0), currentFrame(0),
-  totalFrames(0), interpSteps(9), fps(8), forward(true), profile("default"),
-  connectTime(0), renderSpeed(1.0 / 30.0), idleSpeed(1.0 / 4.0), showInfo(true),
+  rotation(0, 0, 0, 0.999), degreesPerSec(0, 3), lastFrame(0), currentFrame(0),
+  totalFrames(0), interpSteps(35), fps(45), forward(true), profile("default"),
+  connectTime(0), renderSpeed(1.0 / 45.0), idleSpeed(1.0 / 6.0), showInfo(true),
   showLogos(true), showHelp(false), showAbout(false), showButtons(true),
   connectionStatus("None") {
+
+  #ifdef _WIN32
+    RECT desktop;
+    // Returns available screen size without taskbar
+    const HWND hDesktop = GetDesktopWindow();
+    GetWindowRect(hDesktop, &desktop);
+    if (desktop.bottom <= 768 || desktop.right <= 1024) {
+      width=800;
+      height=600;
+    }
+  #else
+    width=800;
+    height=600;
+  #endif
 
   // Add options
   options.add("connect", "An address and port to connect to in the form: "
@@ -249,7 +267,7 @@ void View::setFPS(double fps) {
 
 
 string View::getStatus() const {
-  return trajectory->empty() ? "Loading" : (info.project ? "Live" : "Demo");
+  return trajectory->empty() ? (!client.isNull() && client->hasLoadableSlot() ? "Loading" : (!client.isNull() && client->isConnected() ? "Awaiting" : "")) : (info.project ? "Live" : "Demo");
 }
 
 
@@ -269,6 +287,8 @@ string View::getFrameDescription() const {
 
 
 void View::showPopup(const string &name) {
+  if (name == "home") {return;}		// todo: open homepage or forum, then return
+
   if (name == "about") {closePopup(); showAbout = true;}
   else if (name == "help") {closePopup(); showHelp = true;}
   redisplay();
