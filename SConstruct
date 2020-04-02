@@ -3,8 +3,8 @@ import os
 env = Environment(ENV = os.environ)
 try:
     env.Tool('config', toolpath = [os.environ.get('CBANG_HOME')])
-except Exception, e:
-    raise Exception, 'CBANG_HOME not set?\n' + str(e)
+except Exception as e:
+    raise Exception('CBANG_HOME not set?\n' + str(e))
 
 env.CBLoadTools('compiler cbang dist build_info packager resources ' +
                 'fah-client-version fah-viewer')
@@ -51,7 +51,7 @@ src += ['build/glew/glew.c']
 # Build in 'build'
 import re
 VariantDir('build', 'src')
-src = map(lambda path: re.sub(r'^src/', 'build/', str(path)), src)
+src = list(map(lambda path: re.sub(r'^src/', 'build/', str(path)), src))
 env.AppendUnique(CPPPATH = ['#/build'])
 
 # Resources

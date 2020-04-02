@@ -7,6 +7,17 @@ def configure_deps(conf, withGraphics = True):
     # C!
     conf.CBConfig('cbang')
 
+    if env['PLATFORM'] == 'win32':
+        from SCons.Tool.MSCommon.vc import msvc_version_to_maj_min
+        maj, _ = msvc_version_to_maj_min(env['MSVC_VERSION'])
+
+        # Visual C++ 2015 and onwards requires a compatibility library to link
+        # libraries compiled with older definitions of printf and scanf, such as
+        # the MSYS2 packages for freeglut compiled with MinGW.
+        #     https://docs.microsoft.com/en-us/cpp/porting/visual-cpp-change-history-2003-2015?view=vs-2019#stdio_and_conio
+        if maj >= 14:
+            conf.CBRequireLib('legacy_stdio_definitions')
+
     # For viewer
     if withGraphics:
         conf.CBConfig('freetype2')
