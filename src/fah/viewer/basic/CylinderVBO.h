@@ -3,7 +3,7 @@
                        This file is part of the FAHViewer.
 
             The FAHViewer displays 3D views of Folding@home proteins.
-                    Copyright (c) 2016-2019, foldingathome.org
+                    Copyright (c) 2016-2020, foldingathome.org
                    Copyright (c) 2003-2016, Stanford University
                                All rights reserved.
 

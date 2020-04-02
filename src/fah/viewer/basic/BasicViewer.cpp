@@ -3,7 +3,7 @@
                        This file is part of the FAHViewer.
 
             The FAHViewer displays 3D views of Folding@home proteins.
-                    Copyright (c) 2016-2019, foldingathome.org
+                    Copyright (c) 2016-2020, foldingathome.org
                    Copyright (c) 2003-2016, Stanford University
                                All rights reserved.
 
@@ -73,12 +73,9 @@ BasicViewer::BasicViewer() :
   fahLogo("FAH_logo2", 96, 96, 1), popupYOffset(0), popupPageHeight(0),
   popupLineHeight(21), initialized(false) {
 
-  logos.push_back(new Texture("medschool_logo", 128, 48, 0.9));
-  logos.push_back(new Texture("FAH_logo",       128, 64, 0.9));
-
   const unsigned bSize = 48;
-  buttons.push_back(new Texture("help",        bSize, bSize, 0.9));
-  buttons.push_back(new Texture("about",       bSize, bSize, 0.9));
+  buttons.push_back(new Texture("help",    bSize, bSize, 0.9));
+  buttons.push_back(new Texture("about",   bSize, bSize, 0.9));
 }
 
 
@@ -450,50 +447,11 @@ void BasicViewer::drawInfo(const SimulationInfo &info, const View &view) {
 }
 
 
-void BasicViewer::drawLogos(const View &view) {
-  if (!view.getShowLogos()) return;
-
-  float spacing = 16;
-  float totalWidth = 4 + spacing * (logos.size() - 1);
-  float maxHeight = 0;
-
-  for (unsigned i = 0; i < logos.size(); i++) {
-    totalWidth += logos[i]->getWidth();
-    if (maxHeight < logos[i]->getHeight()) maxHeight = logos[i]->getHeight();
-  }
-
-  // width = view.getWidth() - 4 - (width of small box) - 4
-  float width = view.getWidth() - 268;
-
-  if (width <= 64 * logos.size()) return; // Not enough room
-
-  glDisable(GL_LIGHTING);
-  resetDraw(view);
-
-  glTranslatef(view.getWidth(), 0, 0);
-
-  if (width < totalWidth) {
-    float scale = width / totalWidth;
-    glScalef(scale, scale, 1);
-  }
-
-  glTranslatef(-4, 0, 0);
-  for (unsigned i = 0; i < logos.size(); i++) {
-    glTranslatef(-logos[i]->getWidth(), 0, 0);
-    float y = (maxHeight - logos[i]->getHeight()) / 2 + 2;
-    logos[i]->draw(0, y);
-    glTranslatef(-spacing, 0, 0);
-  }
-
-  CHECK_GL_ERROR("");
-}
-
-
 void BasicViewer::drawButtons(const View &view) {
   if (!view.getShowButtons()) return;
 
   float spacing = 16;
-  float totalHeight = 4 + spacing * (logos.size() - 1);
+  float totalHeight = 4;
   float maxWidth = 0;
 
   for (unsigned i = 0; i < buttons.size(); i++) {
@@ -769,9 +727,6 @@ void BasicViewer::drawRest(const SimulationInfo &info, const View &view) {
   // Draw buttons
   drawButtons(view);
 
-  // Draw logos
-  drawLogos(view);
-
   // Draw simulation info
   drawInfo(info, view);
 
@@ -840,7 +795,6 @@ void BasicViewer::init(ViewMode mode) {
   // Load textures
   box.load();
   darkBox.load();
-  for (unsigned i = 0; i < logos.size(); i++) logos[i]->load();
   for (unsigned i = 0; i < buttons.size(); i++) buttons[i]->load();
   cdLogo.load();
   fahLogo.load();
@@ -856,7 +810,6 @@ void BasicViewer::release() {
 
   // Release textures
   box.release();
-  for (unsigned i = 0; i < logos.size(); i++) logos[i]->release();
 
   initialized = false;
 

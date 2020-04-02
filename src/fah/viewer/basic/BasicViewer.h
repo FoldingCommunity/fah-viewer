@@ -3,7 +3,7 @@
                        This file is part of the FAHViewer.
 
             The FAHViewer displays 3D views of Folding@home proteins.
-                    Copyright (c) 2016-2019, foldingathome.org
+                    Copyright (c) 2016-2020, foldingathome.org
                    Copyright (c) 2003-2016, Stanford University
                                All rights reserved.
 
@@ -67,7 +67,6 @@ namespace FAH {
 
     Box box;
     Box darkBox;
-    std::vector<cb::SmartPointer<Texture> > logos;
     std::vector<cb::SmartPointer<Texture> > buttons;
     Texture cdLogo;
     Texture fahLogo;
@@ -102,7 +101,6 @@ namespace FAH {
     void setupPerspective(const View &view, double radius);
     void drawProtein(const Protein &protein, const View &view);
     void drawInfo(const SimulationInfo &info, const View &view);
-    void drawLogos(const View &view);
     void drawButtons(const View &view);
     void drawBackground(const View &view);
     void drawPopup(const View &view, float width, float height,

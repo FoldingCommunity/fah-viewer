@@ -1,6 +1,6 @@
 * Project Leader *
-Dr. Vijay Pande
-Stanford University
+Dr. Gregory Bowman
+Washington State University in Saint Louis
 
 * Developer *
 Joseph Coffland
