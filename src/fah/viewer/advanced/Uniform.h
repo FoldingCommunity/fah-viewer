@@ -31,8 +31,7 @@
 // 3D Application Research Group
 // (C)Advanced Research, Inc.2006 All rights reserved.
 
-#ifndef FAH_UNIFORM_H
-#define FAH_UNIFORM_H
+#pragma once
 
 #include <string>
 
@@ -84,5 +83,3 @@ namespace FAH {
     unsigned loadShader(const std::string &filename, unsigned type);
   };
 };
-
-#endif // FAH_UNIFORM_H

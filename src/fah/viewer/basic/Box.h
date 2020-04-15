@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_BOX_H
-#define FAH_BOX_H
+#pragma once
 
 #include "Texture.h"
 
@@ -44,6 +43,3 @@ namespace FAH {
     void draw(float width, float height) const;
   };
 }
-
-#endif // FAH_BOX_H
-

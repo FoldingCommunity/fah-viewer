@@ -444,7 +444,7 @@ void View::update(bool fast) {
           currentFrame -= 2;
           forward = false;
         }
-        
+
       } else if (currentFrame-- == 0) {
         currentFrame = 1;
         forward = true;

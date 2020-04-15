@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_BASIC_VIEWER_H
-#define FAH_BASIC_VIEWER_H
+#pragma once
 
 #include <cbang/SmartPointer.h>
 
@@ -125,5 +124,3 @@ namespace FAH {
     static cb::Vector2D project(const cb::Vector2D &v);
   };
 }
-
-#endif // FAH_BASIC_VIEWER_H

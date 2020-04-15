@@ -109,7 +109,7 @@ void AdvancedViewer::setupShadow(const Vector3D &coord,
   glRotatef(angle.angle(), angle.x(), angle.y(), angle.x());
 
   glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();  
+  glPopMatrix();
 
   CHECK_GL_ERROR("");
 }
@@ -131,7 +131,7 @@ static void xorshift_reset() {
 
 static uint32_t xorshift_rand() {
   uint32_t t;
- 
+
   t = rand_x ^ (rand_x << 11);
   rand_x = rand_y; rand_y = rand_z; rand_z = rand_w;
   return rand_w = rand_w ^ (rand_w >> 19) ^ (t ^ (t >> 8));

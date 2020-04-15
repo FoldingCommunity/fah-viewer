@@ -69,7 +69,7 @@ void Texture::load() {
   SmartPointer<PPM> rgbPPM = loadPPMResource(name);
 
   const uint8_t *data;
-  
+
   SmartPointer<PPM> alphaPPM;
   SmartPointer<uint8_t>::Array buffer;
   if (alpha) {
@@ -81,13 +81,13 @@ void Texture::load() {
       THROW("Alpha layer size does not match RGB: " << name);
 
     buffer = new uint8_t[rgbPPM->getSize() * 4];
-    
+
     for (unsigned i = 0; i < rgbPPM->getSize(); i++) {
       memcpy(&buffer[i * 4], &rgbPPM->getRaster()[i * 3], 3);
       buffer[i * 4 + 3] = (uint8_t)(alphaPPM.isNull() ? 255 * alpha :
                                     alpha * alphaPPM->getRaster()[i * 3]);
     }
-    
+
     data = buffer.get();
 
   } else data = rgbPPM->getRaster();
@@ -110,7 +110,7 @@ void Texture::load() {
     if (GL_MAX_TEXTURE_SIZE < w) w = GL_MAX_TEXTURE_SIZE;
     if (GL_MAX_TEXTURE_SIZE < h) h = GL_MAX_TEXTURE_SIZE;
   }
-  
+
   glTexImage2D(GL_TEXTURE_2D, 0, alpha ? GL_RGBA : GL_RGB, w, h, 0,
                  alpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 

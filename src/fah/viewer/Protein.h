@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_PROTEIN_H
-#define FAH_PROTEIN_H
+#pragma once
 
 #include "Topology.h"
 #include "Positions.h"
@@ -56,6 +55,3 @@ namespace FAH {
     double getRadius() const {return radius;}
   };
 }
-
-#endif // FAH_PROTEIN_H
-

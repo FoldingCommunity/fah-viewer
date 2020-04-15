@@ -207,7 +207,7 @@ void Scene::loadData(const string &filename) {
       uniform = new Uniform(key, SAMPLE_PROGRAM);
       recentProgramHandle = uniform->loadProgram(vertShader, fragShader);
       glUseProgram(recentProgramHandle);
-      
+
     } else if (item.empty() || item[0] == '/' || item[0] == '#') {
       // Either an empty line or a comment
 
@@ -224,7 +224,7 @@ void Scene::loadData(const string &filename) {
  * Puts the named program in use
  *
  * @param name - The name we gave to the program
- * 
+ *
  * @return The program handle
  */
 unsigned Scene::getProgramHandle(const string &name) {

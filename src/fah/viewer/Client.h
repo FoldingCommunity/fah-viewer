@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_CLIENT_H
-#define FAH_CLIENT_H
+#pragma once
 
 #include "SimulationInfo.h"
 #include "Trajectory.h"
@@ -103,6 +102,3 @@ namespace FAH {
     virtual void handleMessage(const PyON::Message &msg);
   };
 }
-
-#endif // FAH_CLIENT_H
-

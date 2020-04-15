@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TEST_DATA_H
-#define FAH_TEST_DATA_H
+#pragma once
 
 #include <cbang/SmartPointer.h>
 
@@ -43,6 +42,3 @@ namespace FAH {
     static void load(Trajectory &trajectory);
   };
 }
-
-#endif // FAH_TEST_DATA_H
-

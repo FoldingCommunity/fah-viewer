@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_CYLINDER_VBO_H
-#define FAH_CYLINDER_VBO_H
+#pragma once
 
 #include "VBO.h"
 
@@ -45,6 +44,3 @@ namespace FAH {
     void draw();
   };
 }
-
-#endif // FAH_CYLINDER_VBO_H
-

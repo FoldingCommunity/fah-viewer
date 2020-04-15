@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_PPM_H
-#define FAH_PPM_H
+#pragma once
 
 #include <cbang/StdTypes.h>
 
@@ -57,6 +56,3 @@ namespace FAH {
     void parse(const uint8_t *data, uint64_t length);
   };
 }
-
-#endif // FAH_PPM_H
-

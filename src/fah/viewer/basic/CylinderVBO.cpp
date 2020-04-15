@@ -45,11 +45,11 @@ CylinderVBO::CylinderVBO(float baseRadius, float topRadius, float length,
   VBO(textured), stacks(stacks), slices(slices) {
   float radiusStep = (topRadius - baseRadius) / (float)stacks;
   float stepSizeSlice = M_PI * 2.0 / (float)slices;
- 
+
   Vector3D vertex[4];
   Vector3D normal[4];
   Vector2D texture[4];
- 
+
   float ds = 1.0 / (float)slices;
   float dt = 1.0 / (float)stacks;
   float dz = length / (float)stacks;
@@ -78,7 +78,7 @@ CylinderVBO::CylinderVBO(float baseRadius, float topRadius, float length,
       float sNext = (j == slices - 1) ? 0 : s + ds;
       float theta = stepSizeSlice * j;
       float thetaNext = (j == slices - 1) ? 0 : theta + stepSizeSlice;
-                 
+
       // Inner First
       vertex[1].x() = cos(theta) * currentRadius;
       vertex[1].y() = sin(theta) * currentRadius;
