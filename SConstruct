@@ -38,44 +38,11 @@ if not env.GetOption('clean'):
 
 conf.Finish()
 
-
-# Source
-subdirs = ['', 'advanced', 'basic', 'io', 'pyon']
-src = []
-for dir in subdirs:
-    src += Glob('src/fah/viewer/' + dir + '/*.cpp')
-
-# GLEW
-src += ['build/glew/glew.c']
-
-# Build in 'build'
-import re
-VariantDir('build', 'src')
-src = list(map(lambda path: re.sub(r'^src/', 'build/', str(path)), src))
-env.AppendUnique(CPPPATH = ['#/build'])
-
-# Resources
-res = env.Resources('build/viewer-resources.cpp', ['#/src/resources/viewer'])
-Precious(res)
-resLib = env.Library('fah-viewer-resources', res)
-Precious(resLib)
-
-
-# Build lib
-lib = env.Library('fah-viewer', src)
-
-
-# Build Info
-info = env.BuildInfo('build/build_info.cpp', [])
-AlwaysBuild(info)
-
-
-# FAHViewer
-if int(env.get('cross_mingw', 0)): env.Append(LINKFLAGS = ['-mwindows'])
-viewer = env.Program('#/FAHViewer',
-                     ['build/FAHViewer.cpp', info, lib, resLib]);
+# Viewer
+Export('env')
+viewer, lib = \
+    SConscript('src/FAHViewer.scons', variant_dir = 'build', duplicate = 0)
 Default(viewer)
-
 
 # Clean
 Clean(viewer, ['build', 'config.log'])
