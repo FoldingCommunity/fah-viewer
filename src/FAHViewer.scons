@@ -13,12 +13,12 @@ src += ['glew/glew.c']
 
 # Resources
 res = env.Resources('viewer-resources.cpp', ['#/src/resources/viewer'])
-resLib = env.Library('fah-viewer-resources', res)
+resLib = env.Library('#/fah-viewer-resources', res)
 Precious(resLib)
 
 
 # Build lib
-lib = env.Library('fah-viewer', src)
+lib = env.Library('#/fah-viewer', src)
 
 
 # Build Info
