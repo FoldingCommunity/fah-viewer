@@ -83,6 +83,7 @@ bool Client::setSlot(unsigned slot) {
   if (!slots.empty()) currentSlotID = slots[slot];
 
   string cmd_trajectory = "updates add 3 5 $(trajectory @SLOT@)\n";
+
   std::size_t found = command.find(cmd_trajectory);
   if (found != std::string::npos)
     command.replace(found, cmd_trajectory.length(), "");
@@ -277,39 +278,34 @@ void Client::handleMessage(const PyON::Message &msg) {
   if (msg.getType() == "slots") {
 
     slots.clear();
+    override = slot;
 
     auto &list = msg.get()->getList();
 
-    for (unsigned i = 0; i < list.size(); i++) {
-      if (list.getDict(i)["status"]->getString() != "READY")
-      {
+    for (unsigned i = 0; i < list.size(); i++)
+      if (list.getDict(i)["status"]->getString() != "READY") {
+        // Any slot that could possibly offer us trajectory data
         slots.push_back(String::parseU64(list.getDict(i)["id"]->getString()));
 
         if (list.getDict(i)["status"]->getString() == "RUNNING") {
-          if ((list.getDict(i)["description"]->getString()).substr(0,3) == "cpu") {
-            if (!slot && currentSlotID == -1) slot = slots.size()-1;
+          if (list.getDict(i)["description"]->getString().substr(0,3) == "cpu") {
+            if (!override && currentSlotID == -1) slot = slots.size() - 1;
             has_loadable_slot = true;
-          }
-          else  // running GPU
-            if (!has_loadable_slot) {
-              if (!slot && currentSlotID == -1) slot = slots.size()-1;
+          } else if (!has_loadable_slot) {
+              if (!override && currentSlotID == -1) slot = slots.size() - 1;
               has_running_gpu = true;
             }
-        }
-        else
-        {
-          if (!has_loadable_slot && !has_running_gpu)
-            if ((list.getDict(i)["description"]->getString()).substr(0,3) == "cpu")
-              if (!slot && currentSlotID == -1) slot = slots.size()-1;
-        }
+
+        } else if (!has_loadable_slot && !has_running_gpu)
+            if (list.getDict(i)["description"]->getString()
+                                                  .substr(0,3) == "cpu")
+              if (!override && currentSlotID == -1) slot = slots.size() - 1;
       }
-    }
 
     if (!slots.empty()) {
       currentSlotID = slots[slot];
 
-      string cmd =
-          "updates add 2 5 $(simulation-info @SLOT@)\n";
+      string cmd = "updates add 2 5 $(simulation-info @SLOT@)\n";
 
       if (command.find(cmd) == string::npos) {
         sendCommands(cmd);
@@ -338,17 +334,16 @@ void Client::handleMessage(const PyON::Message &msg) {
 
       switch (coreType) {
       case 34:
-          info.loadJSON(*msg.get());
-          break;
+        info.loadJSON(*msg.get());
+        break;
       default:
-          if (info.coreType == 0) {
-              string cmd =
-                  "updates add 3 5 $(trajectory @SLOT@)\n";
-              sendCommands(cmd);
-          }
-          info.loadJSON(*msg.get());
-          has_loadable_slot = true;
-          break;
+        if (info.coreType == 0) {
+          string cmd = "updates add 3 5 $(trajectory @SLOT@)\n";
+          sendCommands(cmd);
+        }
+        info.loadJSON(*msg.get());
+        has_loadable_slot = true;
+        break;
       }
   }
 }

@@ -65,11 +65,13 @@ namespace FAH {
 
   private:
     state_t state;
-    bool has_loadable_slot = false;
-    bool has_running_gpu = false;
     uint64_t lastConnect;
     uint64_t lastData;
     bool waitingForUpdate;
+
+    bool override;
+    bool has_loadable_slot = false;
+    bool has_running_gpu = false;
 
     cb::MemoryBuffer buffer;
     unsigned searchOffset;

@@ -55,25 +55,26 @@ View::View(cb::Options &options) :
   rotation(0, 0, 0, 0.999), rotate(true), degreesPerSec(0, 5), turbo(0),
   skipMultiplier(2), lastFrame(0), currentFrame(0), totalFrames(0),
   interpSteps(54), fps(16), forward(true), profile("default"), connectTime(0),
-  renderSpeed(1.0 / 32.0), idleSpeed(1.0 / 5.0), showInfo(true), showLogos(true),
-  showHelp(false), showAbout(false), showButtons(true), connectionStatus("None") {
+  renderSpeed(1.0 / 32.0), idleSpeed(1.0 / 5.0), showInfo(true),
+  showLogos(true), showHelp(false), showAbout(false), showButtons(true),
+  connectionStatus("None") {
 
   #ifdef _WIN32
-    RECT desktop;
-    // Returns available screen size without taskbar
-    const HWND hDesktop = GetDesktopWindow();
-    GetWindowRect(hDesktop, &desktop);
-    if (desktop.bottom > 768 && desktop.right > 1024) {
-      width=1024;
-      height=768;
-    }
+  RECT desktop;
+  // Returns available screen size without taskbar
+  const HWND hDesktop = GetDesktopWindow();
+  GetWindowRect(hDesktop, &desktop);
+  if (desktop.bottom > 768 && desktop.right > 1024) {
+    width = 1024;
+    height = 768;
+  }
   #endif
 
   // Add options
   options.add("connect", "An address and port to connect to in the form: "
               "<host | IP>:<port>")->setDefault("127.0.0.1:36330");
-  options.addTarget("password", password, "A password for accessing the remote "
-                    "client")->setObscured();
+  options.addTarget("password", password, "A password for accessing the "
+                    "remote client")->setObscured();
   options.addTarget("slot", slot, "Slot on the client to view");
   options.add("test", "Load test data")->setDefault(true);
 
@@ -236,15 +237,22 @@ void View::setMode(ViewMode mode) {
 }
 
 
+void View::setPause(bool pause) {
+  if (!pause) lastFrame = Time::now();
+  this->pause = pause;
+}
+
+
 void View::setSlot(unsigned slot) {
   if (slot == this->slot) return;
 
   if (!client.isNull()) {
     if (!client->setSlot(slot)) return;
     connectTime = Time::now();
-    trajectory->clear();
-    protein = 0; redisplay();
     info = SimulationInfo();
+    trajectory->clear();
+    protein = 0;
+    redisplay();
   }
 
   this->slot = slot;
@@ -252,33 +260,19 @@ void View::setSlot(unsigned slot) {
 
 
 unsigned View::getSlot() {
-  if (!client.isNull())
-    this->slot = client->getSlot();
+  if (!client.isNull()) slot = client->getSlot();
   return slot;
 }
 
 
-void View::setPause(bool pause) {
-  if (!pause) lastFrame = Time::now();
-  this->pause = pause;
-}
-
-
 string View::getStatus() const {
-  if (trajectory->empty() && !client.isNull())
-  {
-    if (info.coreType == 34)
-      return "INCOMPAT";
-    else if (client->hasLoadableSlot())
-      return "Loading";
-    else
-      if (client->isConnected())
-        return "Awaiting";
-      else
-        return "";
-  }
-  else
-  return info.project ? "Live" : "Demo";
+  if (trajectory->empty() && !client.isNull()) {
+    if (info.coreType == 34) return "INCOMPAT";
+    else if (client->hasLoadableSlot()) return "Loading";
+    else if (client->isConnected()) return "Awaiting";
+    else return "";
+
+  } else return info.project ? "Live" : "Demo";
 }
 
 
@@ -300,21 +294,12 @@ string View::getFrameDescription() const {
 void View::showPopup(const string &name) {
   if (name == "about") {
     if (showAbout) closePopup();
-    else {
-      closePopup();
-      showAbout = true;
-    }
-  }
-  else if (name == "help") {
+    else {closePopup(); showAbout = true;}
+  } else if (name == "help") {
     if (showHelp) closePopup();
-    else {
-      closePopup();
-      showHelp = true;
-    }
-  } else if (name == "home") {
-    // todo: open F@H homepage
-    return;
-  }
+    else {closePopup(); showHelp = true;}
+  } else if (name == "home") {return;}     // todo: open F@H homepage
+
   redisplay();
 }
 
@@ -432,12 +417,10 @@ void View::setTurbo(bool turbo) {
     renderSpeed = 1.0 / 75.0;
     oldFps = fps;
     fps = 75;
-  }
-  else
-  {
+
+  } else {
     this->turbo = false;
-    if (!comingFromLowSpeed)
-      skipMultiplier++;
+    if (!comingFromLowSpeed) skipMultiplier++;
     renderSpeed = 1.0 / 32.0;
     fps = oldFps;
   }
@@ -445,36 +428,17 @@ void View::setTurbo(bool turbo) {
 
 
 void View::incFPS() {
-  if (turbo) {
-    if (skipMultiplier <= 20)
-      skipMultiplier++;
-  }
-  else
-  {
-    if ((fps *= 2) > 32)
-    {
-      fps = 32;
-      skipMultiplier++;
-    }
-  }
+  if (turbo) {if (skipMultiplier <= 20) skipMultiplier++;}
+  else if ((fps *= 2) > 32) {fps = 32; skipMultiplier++;}
 }
 
+
 void View::decFPS() {
-  if (turbo) {
-    if(skipMultiplier)
-      skipMultiplier--;
-  }
-  else
-  {
-    if (fps == 32 || skipMultiplier <= 1)
-    {
-      fps /= 2;
-      if (fps < 0.25)
-        this->fps = 0.25;
-    }
-    else
-      --skipMultiplier;
-  }
+  if (turbo) {if(skipMultiplier) skipMultiplier--;}
+  else if (fps == 32 || skipMultiplier <= 1) {
+    fps /= 2;
+    if (fps < 0.25) this->fps = 0.25;
+  } else --skipMultiplier;
 }
 
 
@@ -519,7 +483,8 @@ void View::update(bool fast) {
         double angle = (Timer::now() - lastFrame) *
           -degreesPerSec.x() / 180 * M_PI;
         QuaternionD delta(AxisAngleD(angle, 1, 0, 0));
-        rotation = QuaternionD(delta.normalize()).multiply(rotation).normalize();
+        rotation = QuaternionD(delta.normalize())
+                     .multiply(rotation).normalize();
         redisplay = true;
       }
 
@@ -528,7 +493,8 @@ void View::update(bool fast) {
         double angle = (Timer::now() - lastFrame) *
           degreesPerSec.y() / 180 * M_PI;
         QuaternionD delta(AxisAngleD(angle, 0, 1, 0));
-        rotation = QuaternionD(delta.normalize()).multiply(rotation).normalize();
+        rotation = QuaternionD(delta.normalize())
+                     .multiply(rotation).normalize();
         redisplay = true;
       }
     }
@@ -537,22 +503,24 @@ void View::update(bool fast) {
 
     // Cycle frames
     unsigned oldFrame = currentFrame;
+
     if (1 < trajectory->size() && cycle) {
       // Advance frame
       if (forward) {
         currentFrame += skipMultiplier;
-        if (currentFrame >= trajectory->size()-1) {
-          currentFrame = trajectory->size()-1;
+        if (currentFrame >= trajectory->size() - 1) {
+          currentFrame = trajectory->size() - 1;
           forward = false;
         }
-      }
-      else {
+
+      } else {
         currentFrame -= skipMultiplier;
         if (currentFrame <= 0) {
           currentFrame = 0;
           forward = true;
         }
       }
+
     } else if (!trajectory->empty()) currentFrame = trajectory->size() - 1;
 
     if (oldFrame != currentFrame) {
@@ -562,6 +530,7 @@ void View::update(bool fast) {
 
       redisplay = true;
     }
+
     if (protein.isNull() && currentFrame < trajectory->size())
       protein = trajectory->getProtein(currentFrame);
 
