@@ -71,7 +71,7 @@ void PPM::parse(const uint8_t *data, uint64_t length) {
   while (isspace(*data)) data++;
 
   // Comment
-  if (*data == '#') {
+  while (*data == '#') {
     while (*data != '\n') data++;
     while (isspace(*data)) data++;
   }
