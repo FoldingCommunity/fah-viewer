@@ -192,58 +192,62 @@ bool Client::readSome() {
 
     if (buffer.getFill() < 15) return true; // Not enough
 
-    switch (state) {
-    case STATE_HEADER: {
-      // Search for start of message
-      const char *ptr =
-        find_string(buffer.begin(), buffer.getFill(), "\nPyON ");
+    do {
+      switch (state) {
+      case STATE_HEADER: {
+        // Search for start of message
+        const char *ptr =
+            find_string(buffer.begin(), buffer.getFill(), "\nPyON ");
 
-      if (!ptr) { // Not found
-        if (4096 < buffer.getFill()) {
-          // Discard all but the end of the buffer
-          memcpy(buffer.begin(), buffer.end() - 5,  5);
-          buffer.clear(); // Reset fill to zero
-          buffer.incFill(5);
+        if (!ptr) { // Not found
+          if (4096 < buffer.getFill()) {
+            // Discard all but the end of the buffer
+            memcpy(buffer.begin(), buffer.end() - 5,  5);
+            buffer.clear(); // Reset fill to zero
+            buffer.incFill(5);
+          }
+          return true;
         }
-        return true;
+
+        messageStart = ptr - buffer.begin() + 1; // Save offset
+        searchOffset = messageStart + 6;
+        state = STATE_DATA;
+        // Fall through to next case
       }
 
-      messageStart = ptr - buffer.begin() + 1; // Save offset
-      searchOffset = messageStart + 6;
-      state = STATE_DATA;
-      // Fall through to next case
-    }
+      case STATE_DATA: {
+        // Search for end of message
+        const char *ptr =
+            find_string(buffer.begin() + searchOffset,
+                buffer.getFill() - searchOffset, "\n---\n");
 
-    case STATE_DATA: {
-      // Search for end of message
-      const char *ptr =
-        find_string(buffer.begin() + searchOffset,
-                    buffer.getFill() - searchOffset, "\n---\n");
+        if (!ptr) {
+          searchOffset = buffer.getFill() - 5;
+          return true;
+        }
 
-      if (!ptr) {
-        searchOffset = buffer.getFill() - 5;
-        return true;
+        // Found a complete message
+        processMessage(buffer.begin() + messageStart, ptr + 5);
+
+        // Cleanup buffer
+        unsigned end = (ptr + 4) - buffer.begin();
+        if (end == buffer.getFill()) buffer.clear();
+        else {
+          unsigned remaining = buffer.getFill() - end;
+          memmove(buffer.begin(), buffer.begin() + end, remaining);
+          buffer.clear();
+          buffer.incFill(remaining);
+        }
+
+        state = STATE_HEADER;
+        break;     // to end of switch and continue loop
       }
 
-      // Found a complete message
-      processMessage(buffer.begin() + messageStart, ptr + 5);
-
-      // Cleanup buffer
-      unsigned end = (ptr + 4) - buffer.begin();
-      if (end == buffer.getFill()) buffer.clear();
-      else {
-        unsigned remaining = buffer.getFill() - end;
-        memmove(buffer.begin(), buffer.begin() + end, remaining);
-        buffer.clear();
-        buffer.incFill(remaining);
+      default: THROW("Invalid state");
       }
-
-      state = STATE_HEADER;
-      return true;
-    }
-
-    default: THROW("Invalid state");
-    }
+      //  Continue reading as there might be more messages in the buffer
+    } while (state == STATE_HEADER && buffer.getFill() > 15);
+    return true;
   } CLIENT_CATCH_ERROR;
 
   reconnect();
