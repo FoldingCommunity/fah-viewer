@@ -46,7 +46,7 @@
 #include <string>
 #include <utility>
 
-#define SUBDIVISIONS 32
+#define SUBDIVISIONS 8
 #define SPHERE_SIZE 1.0
 #define SPHERE_SIZE_SMALL 0.5
 #define SPHERE_SIZE_TINY 0.2
