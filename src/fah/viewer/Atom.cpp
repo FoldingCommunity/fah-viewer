@@ -170,6 +170,7 @@ void Atom::loadJSON(const JSON::Value &value, float scale) {
 
   if (!number) number = numberFromName(type);
   if (!charge) charge = chargeFromNumber(number);
-  if (!radius) radius = radiusFromNumber(number);
+  //  Client sends radius value of -1 as a default
+  if (radius < 0) radius = radiusFromNumber(number);
   if (!mass) mass = massFromNumber(number);
 }
