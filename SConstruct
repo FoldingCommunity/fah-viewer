@@ -86,7 +86,7 @@ if 'package' in COMMAND_LINE_TARGETS:
         description = description,
         short_description = short_description,
         prefix = '/usr',
-        copyright = 'Copyright 2010-2016 Stanford University',
+        copyright = 'Copyright 2010-2020 foldingathome.org',
 
         documents = docs,
         programs = [str(viewer[0])],
