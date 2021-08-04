@@ -48,7 +48,7 @@ PPM::PPM(const uint8_t *data, uint64_t length) :
 }
 
 
-PPM::PPM(const string &filename) 
+PPM::PPM(const string &filename)
   : width(0), height(0), maxColor(0), raster(0), data(0) {
   uint64_t length = SystemUtilities::getFileSize(filename);
   data = new uint8_t[length];
@@ -71,7 +71,7 @@ void PPM::parse(const uint8_t *data, uint64_t length) {
   while (isspace(*data)) data++;
 
   // Comment
-  if (*data == '#') {
+  while (*data == '#') {
     while (*data != '\n') data++;
     while (isspace(*data)) data++;
   }

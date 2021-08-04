@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_GL_H
-#define FAH_GL_H
+#pragma once
 
 #include <glew/glew.h> // Must be first
 
@@ -50,5 +49,3 @@ namespace FAH {
 #else
 #define CHECK_GL_ERROR(msg)
 #endif
-
-#endif // FAH_GL_H

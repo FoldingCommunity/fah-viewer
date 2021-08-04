@@ -1,0 +1,34 @@
+Import('*')
+
+env.Append(CPPPATH = ['#/src'])
+
+# Source
+subdirs = ['', 'advanced', 'basic', 'io', 'pyon']
+src = []
+for dir in subdirs:
+  src += Glob('fah/viewer/' + dir + '/*.cpp')
+
+# GLEW
+src += ['glew/glew.c']
+
+# Resources
+res = env.Resources('viewer-resources.cpp', ['#/src/resources/viewer'])
+resLib = env.Library('#/fah-viewer-resources', res)
+Precious(resLib)
+
+
+# Build lib
+lib = env.Library('#/fah-viewer', src)
+
+
+# Build Info
+info = env.BuildInfo('build_info.cpp', [])
+AlwaysBuild(info)
+
+
+# FAHViewer
+prog = env.Program('#/FAHViewer', ['FAHViewer.cpp', info, lib, resLib]);
+Default(prog)
+
+pair = (prog, lib)
+Return('pair')

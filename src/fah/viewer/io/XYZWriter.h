@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_XYZWRITER_H
-#define FAH_XYZWRITER_H
+#pragma once
 
 #include <cbang/io/OutputSink.h>
 
@@ -48,6 +47,3 @@ namespace FAH {
     void write(const Protein &protein);
   };
 }
-
-#endif // FAH_XYZWRITER_H
-

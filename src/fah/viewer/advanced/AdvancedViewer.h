@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_ADVANCED_VIEWER_H
-#define FAH_ADVANCED_VIEWER_H
+#pragma once
 
 #include <fah/viewer/basic/BasicViewer.h>
 
@@ -71,6 +70,3 @@ namespace FAH {
               const View &view);
   };
 }
-
-#endif // FAH_ADVANCED_VIEWER_H
-

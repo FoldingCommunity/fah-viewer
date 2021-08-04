@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_XYZREADER_H
-#define FAH_XYZREADER_H
+#pragma once
 
 #include <cbang/io/InputSource.h>
 
@@ -46,6 +45,3 @@ namespace FAH {
     void read(Positions &positions, Topology *topology = 0);
   };
 }
-
-#endif // FAH_XYZREADER_H
-

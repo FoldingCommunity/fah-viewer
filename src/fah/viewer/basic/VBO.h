@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_VBO_H
-#define FAH_VBO_H
+#pragma once
 
 #include <cbang/SmartPointer.h>
 
@@ -63,6 +62,3 @@ namespace FAH {
                     const cb::SmartPointer<float>::Array &normData);
   };
 }
-
-#endif // FAH_VBO_H
-

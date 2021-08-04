@@ -36,46 +36,19 @@ if not env.GetOption('clean'):
 
     env.CBConfConsole() # Build console app on Windows
 
+    if env['PLATFORM'] == 'darwin':
+        # Cleanup part of old package build so fah installer
+        # will not bundle an old viewer and claim success
+        import shutil
+        shutil.rmtree('build/pkg', True)
+
 conf.Finish()
 
-
-# Source
-subdirs = ['', 'advanced', 'basic', 'io', 'pyon']
-src = []
-for dir in subdirs:
-    src += Glob('src/fah/viewer/' + dir + '/*.cpp')
-
-# GLEW
-src += ['build/glew/glew.c']
-
-# Build in 'build'
-import re
-VariantDir('build', 'src')
-src = list(map(lambda path: re.sub(r'^src/', 'build/', str(path)), src))
-env.AppendUnique(CPPPATH = ['#/build'])
-
-# Resources
-res = env.Resources('build/viewer-resources.cpp', ['#/src/resources/viewer'])
-Precious(res)
-resLib = env.Library('fah-viewer-resources', res)
-Precious(resLib)
-
-
-# Build lib
-lib = env.Library('fah-viewer', src)
-
-
-# Build Info
-info = env.BuildInfo('build/build_info.cpp', [])
-AlwaysBuild(info)
-
-
-# FAHViewer
-if int(env.get('cross_mingw', 0)): env.Append(LINKFLAGS = ['-mwindows'])
-viewer = env.Program('#/FAHViewer',
-                     ['build/FAHViewer.cpp', info, lib, resLib]);
+# Viewer
+Export('env')
+viewer, lib = \
+    SConscript('src/FAHViewer.scons', variant_dir = 'build', duplicate = 0)
 Default(viewer)
-
 
 # Clean
 Clean(viewer, ['build', 'config.log'])
@@ -119,7 +92,7 @@ if 'package' in COMMAND_LINE_TARGETS:
         description = description,
         short_description = short_description,
         prefix = '/usr',
-        copyright = 'Copyright 2010-2016 Stanford University',
+        copyright = 'Copyright 2010-2020 foldingathome.org',
 
         documents = docs,
         programs = [str(viewer[0])],
@@ -142,7 +115,8 @@ if 'package' in COMMAND_LINE_TARGETS:
         rpm_build = 'rpm/build',
 
         app_id = 'org.foldingathome.fahviewer',
-        app_resources = [['osx/Resources/', '.']],
+        app_resources = [['osx/Resources/', '.'],
+                        ['osx/entitlements.plist', '.']],
         app_signature = '????',
         app_other_info = {'CFBundleIconFile': 'FAHViewer.icns'},
         app_shared = ['backgrounds'],
@@ -150,7 +124,7 @@ if 'package' in COMMAND_LINE_TARGETS:
 
         pkg_resources = 'osx/Resources',
         pkg_apps = [['FAHViewer.app', 'Folding@home/FAHViewer.app']],
-        pkg_target = '10.6',
+        pkg_target = '10.7',
         pkg_scripts = 'osx/scripts',
         pkg_distribution = 'osx/distribution.xml',
         pkg_plist = 'osx/pkg.plist',

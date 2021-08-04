@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_GL_FREE_TYPE_H
-#define FAH_GL_FREE_TYPE_H
+#pragma once
 
 #include <cbang/geom/Vector.h>
 
@@ -74,5 +73,3 @@ namespace FAH {
     void displayList(FT_Face face, unsigned char ch);
   };
 }
-
-#endif // FAH_GL_FREE_TYPE_H

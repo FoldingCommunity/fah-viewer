@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_BOND_H
-#define FAH_BOND_H
+#pragma once
 
 #include <fah/viewer/pyon/Object.h>
 
@@ -51,6 +50,3 @@ namespace FAH {
     void loadJSON(const cb::JSON::Value &value);
   };
 }
-
-#endif // FAH_BOND_H
-

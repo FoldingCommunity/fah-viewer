@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_VIEW_H
-#define FAH_VIEW_H
+#pragma once
 
 #include "Client.h"
 #include "Trajectory.h"
@@ -241,6 +240,3 @@ namespace FAH {
     virtual void reshape(unsigned width, unsigned height) {}
   };
 }
-
-#endif // FAH_VIEW_H
-

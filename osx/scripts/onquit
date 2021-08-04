@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# fahviewer onquit
+# do that which should not be done while installer is running
+
+# nothing in here is needed if user used the uninstall pkg
+# this is to fix mistakes and fight app relocation
+# fah ~7.5.1 changed bundleid to org.foldinathome.*
+# this caused app relocation for an upgrade install
+
 if [ "$1" != "--delayed-action" ]; then
   "$0" --delayed-action "$@" &
   exit 0
@@ -18,6 +26,9 @@ done
 if [ $I -lt 1 ]; then sleep 1; fi
 
 # move app if it was relocated to old place
+# move must delayed becuase installd will try to register app in installed
+# location after all scripts have been run, although it seems to just be a
+# harmless error message in installer log
 A1="/Applications/FAHViewer.app"
 A2="/Applications/Folding@home/FAHViewer.app"
 if [ -d "$A1" ]; then
@@ -34,5 +45,13 @@ fi
 if [ -d "$A1" ]; then chmod -R go-w "$A1"; fi
 if [ -d "$A2" ]; then chmod -R go-w "$A2"; fi
 
-# do action
-#"$@"
+A3="/Applications/Folding@home/FAHViewer/FAHViewer.app"
+F1="/Applications/Folding@home/FAHViewer/.DS_Store"
+D1="/Applications/Folding@home/FAHViewer"
+[ -d "$A3" ] && [ ! -d "$A2"] && mv "$A3" "$A2" || true
+[ -f "$F1" ] && rm -f "$F1" || true
+[ -d "$D1" ] && rmdir "$D1" || true
+
+# fix incorrect perms, which may persist from old pkg mistake
+D1="/Applications/Folding@home"
+[ -d "$D1" ] && chmod 0755 "$D1" || true

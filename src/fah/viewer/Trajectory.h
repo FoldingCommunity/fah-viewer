@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TRAJECTORY_H
-#define FAH_TRAJECTORY_H
+#pragma once
 
 #include "Protein.h"
 #include "Topology.h"
@@ -86,5 +85,3 @@ namespace FAH {
     void interpolateTo(const Positions &p);
   };
 }
-
-#endif // FAH_TRAJECTORY_H

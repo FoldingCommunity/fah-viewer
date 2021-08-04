@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_VIEWER_APP_H
-#define FAH_VIEWER_APP_H
+#pragma once
 
 #include "View.h"
 
@@ -88,6 +87,3 @@ namespace FAH {
     void reshape(unsigned width, unsigned height);
   };
 }
-
-#endif // FAH_VIEWER_APP_H
-

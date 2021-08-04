@@ -181,7 +181,7 @@ void GLFreeType::print(float x, float y, const string &s,
 
     glTranslatef(x + offset, y - lineHeight * h * i, 0);
     glCallLists((GLsizei)lines[i].length(), GL_UNSIGNED_BYTE, lines[i].c_str());
-    
+
     glPopMatrix();
   }
 

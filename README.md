@@ -37,7 +37,7 @@ You will need the `freetype` and `freeglut` libraries.
 
 ### Debian / Ubuntu
 
-    sudo apt install libfreetype6-dev freeglut3-dev
+    sudo apt install libfreetype6-dev freeglut3-dev pkg-config
 
 ### Windows
 

@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TEXTURE_H
-#define FAH_TEXTURE_H
+#pragma once
 
 #include <string>
 
@@ -61,6 +60,3 @@ namespace FAH {
     virtual void draw(float x = 0, float y = 0, float w = 0, float h = 0) const;
   };
 }
-
-#endif // FAH_TEXTURE_H
-

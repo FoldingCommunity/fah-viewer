@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_SPHERE_VBO_H
-#define FAH_SPHERE_VBO_H
+#pragma once
 
 #include "VBO.h"
 
@@ -47,6 +46,3 @@ namespace FAH {
     void draw();
   };
 }
-
-#endif // FAH_SPHERE_VBO_H
-

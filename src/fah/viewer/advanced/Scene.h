@@ -31,8 +31,7 @@
 // 3D Application Research Group
 // (C)Advanced Research, Inc.2006 All rights reserved.
 
-#ifndef FAH_SCENE_H
-#define FAH_SCENE_H
+#pragma once
 
 #include "Uniform.h"
 
@@ -91,5 +90,3 @@ namespace FAH {
     void freeResources();
   };
 };
-
-#endif // FAH_SCENE_H

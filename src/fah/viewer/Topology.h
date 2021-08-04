@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_TOPOLOGY_H
-#define FAH_TOPOLOGY_H
+#pragma once
 
 #include "Atom.h"
 #include "Bond.h"
@@ -79,6 +78,3 @@ namespace FAH {
     void loadJSON(const cb::JSON::Value &value, float scale);
   };
 }
-
-#endif // FAH_TOPOLOGY_H
-

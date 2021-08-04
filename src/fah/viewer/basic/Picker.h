@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_PICKER_H
-#define FAH_PICKER_H
+#pragma once
 
 #include <cbang/geom/Rectangle.h>
 
@@ -46,6 +45,3 @@ namespace FAH {
     std::string pick(const cb::Vector2D &v) const;
   };
 }
-
-#endif // FAH_PICKER_H
-

@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_VIEWER_H
-#define FAH_VIEWER_H
+#pragma once
 
 #include "SimulationInfo.h"
 #include "Protein.h"
@@ -58,5 +57,3 @@ namespace FAH {
     virtual std::string pick(const cb::Vector2D &p) {return "";}
   };
 }
-
-#endif // FAH_VIEWER_H

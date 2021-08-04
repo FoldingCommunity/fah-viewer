@@ -27,8 +27,7 @@
 
 \******************************************************************************/
 
-#ifndef FAH_ATOM_H
-#define FAH_ATOM_H
+#pragma once
 
 #include <fah/viewer/pyon/Object.h>
 
@@ -97,6 +96,3 @@ namespace FAH {
     void loadJSON(const cb::JSON::Value &value, float scale);
   };
 }
-
-#endif // FAH_ATOM_H
-
