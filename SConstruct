@@ -36,6 +36,12 @@ if not env.GetOption('clean'):
 
     env.CBConfConsole() # Build console app on Windows
 
+    if env['PLATFORM'] == 'darwin':
+        # Cleanup part of old package build so fah installer
+        # will not bundle an old viewer and claim success
+        import shutil
+        shutil.rmtree('build/pkg', True)
+
 conf.Finish()
 
 # Viewer
@@ -109,7 +115,8 @@ if 'package' in COMMAND_LINE_TARGETS:
         rpm_build = 'rpm/build',
 
         app_id = 'org.foldingathome.fahviewer',
-        app_resources = [['osx/Resources/', '.']],
+        app_resources = [['osx/Resources/', '.'],
+                        ['osx/entitlements.plist', '.']],
         app_signature = '????',
         app_other_info = {'CFBundleIconFile': 'FAHViewer.icns'},
         app_shared = ['backgrounds'],
@@ -117,7 +124,7 @@ if 'package' in COMMAND_LINE_TARGETS:
 
         pkg_resources = 'osx/Resources',
         pkg_apps = [['FAHViewer.app', 'Folding@home/FAHViewer.app']],
-        pkg_target = '10.6',
+        pkg_target = '10.7',
         pkg_scripts = 'osx/scripts',
         pkg_distribution = 'osx/distribution.xml',
         pkg_plist = 'osx/pkg.plist',

@@ -1,6 +1,9 @@
 Folding@home 3D Viewer Changelog
 ================================
 
+## v7.6.22
+- Sandbox app on macOS. @kbernhagen
+
 ## v7.5.1
  - OSX installer updates. @kbernhagen
  - Fixed PyON message parsing.
