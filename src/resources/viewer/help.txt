@@ -1,5 +1,9 @@
 Viewer key commands:
   a           Show about screen.
+  h           Show help screen.
+  i           Toggle info display.
+  l           Toggle logo display.
+  f           Toggle fullscreen.
   1           Space Filling render mode.
   2           Ball & Stick render mode.
   3           Stick render mode.
@@ -9,24 +13,23 @@ Viewer key commands:
   7           Cartoon Space Filling render mode. (Requires OpenGL 2.2)
   8           Cartoon Ball & Stick render mode. (Requires OpenGL 2.2)
   b           Toggle blur (advanced modes only).
-  i           Toggle info display.
-  l           Toggle logo display.
-  f           Toggle fullscreen.
+  w           Toggle wiggling.
+  r           Toggle rotation.
+  t           Toggle turbo / eco rendering.
   0           Toggle snapshot cycling.
-  +           Increase snapshot cycle rate.
-  -           Decrease snapshot cycle rate.
-  [           Decrease slot ID.
-  ]           Increase slot ID.
-  <Space>     Toggle rotation.
+  +           Increase snapshot cycling rate.
+  -           Decrease snapshot cycling rate.
+  ]           Next slot ID.
+  [           Previous slot ID.
+  <Space>     Pause simulation.
   <Up>        Increase X-axis rotation speed in the upward direction.
   <Down>      Increase X-axis rotation speed in the downward direction.
   <Left>      Increase Y-axis rotation speed in the left direction.
   <Right>     Increase Y-axis rotation speed in the right direction.
   <Page Up>   Zoom in.
   <Page Down> Zoom out.
-  <ESC>       Quit popup.
-  q           Quit application or popup.
-  h           Show help screen.
+  <ESC>       Close popup.
+  q           Quit application.
  
 Viewer mouse commands:
   Left Drag   Rotate protein.

@@ -68,6 +68,10 @@ namespace FAH {
     uint64_t lastData;
     bool waitingForUpdate;
 
+    bool override;
+    bool has_loadable_slot = false;
+    bool has_running_gpu = false;
+
     cb::MemoryBuffer buffer;
     unsigned searchOffset;
     unsigned messageStart;
@@ -86,9 +90,11 @@ namespace FAH {
     void setCommand(const std::string &command) {this->command = command;}
 
     bool isConnected() const {return STATE_CONNECTING < state;}
+    bool hasLoadableSlot() const {return has_loadable_slot;}
     state_t getState() const {return state;}
 
     bool setSlot(unsigned slot);
+    unsigned getSlot() const {return slot;}
 
     bool update();
 

@@ -64,6 +64,7 @@ namespace FAH {
 
     bool basic;
     bool wiggle;
+    bool rotate;
     bool cycle;
     bool blur;
 
@@ -79,11 +80,15 @@ namespace FAH {
     cb::Vector2D degreesPerSec;
 
     double lastFrame;
-    unsigned currentFrame;
+    int currentFrame;
     unsigned totalFrames;
     unsigned interpSteps;
     double fps;
+    double oldFps;
     bool forward;
+    bool turbo;
+    unsigned skipMultiplier;
+    bool comingFromLowSpeed;
 
     std::string profile;
 
@@ -146,6 +151,9 @@ namespace FAH {
     void setWiggle(bool wiggle) {this->wiggle = wiggle;}
     bool getWiggle() const {return wiggle;}
 
+    void setRotate(bool rotate) {this->rotate = rotate;}
+    bool getRotate() const {return rotate;}
+
     void setCycle(bool cycle) {this->cycle = cycle;}
     bool getCycle() const {return cycle;}
 
@@ -156,7 +164,7 @@ namespace FAH {
     ViewMode getMode() const {return mode;}
 
     void setSlot(unsigned slot);
-    unsigned getSlot() const {return slot;}
+    unsigned getSlot();
 
     void setPause(bool pause);
     bool getPause() const {return pause;}
@@ -172,8 +180,11 @@ namespace FAH {
     unsigned getTotalFrames() const {return totalFrames;}
     unsigned getInterpSteps() const {return interpSteps;}
 
-    void setFPS(double fps);
-    double getFPS() const {return fps;}
+    void incFPS();
+    void decFPS();
+
+    void setTurbo(bool turbo);
+    bool getTurbo() {return turbo;}
 
     const cb::Vector2D &getMousePosition() const {return mousePosition;}
 

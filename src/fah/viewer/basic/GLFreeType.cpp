@@ -169,6 +169,9 @@ void GLFreeType::print(float x, float y, const string &s,
   String::tokenize(s, lines, "\n", true);
 
   for (unsigned i = 0; i < lines.size(); i++) {
+    lines[i].erase(std::remove(lines[i].begin(), lines[i].end(), '\r'),
+                   lines[i].end());
+
     float offset = 0;
     if (center) offset = (center - width(lines[i])) / 2;
 

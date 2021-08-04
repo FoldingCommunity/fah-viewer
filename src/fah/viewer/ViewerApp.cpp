@@ -343,10 +343,13 @@ void ViewerApp::keys(unsigned char key, int x, int y) {
       break;
 
     case ' ': setPause(!getPause()); break;
-    case '+': setFPS(getFPS() * 2); break;
-    case '-': setFPS(getFPS() / 2); break;
+    case '+': incFPS(); break;
+    case '-': decFPS(); break;
     case '[': if (getSlot()) setSlot(getSlot() - 1); break;
     case ']': setSlot(getSlot() + 1); break;
+    case 't': setTurbo(!getTurbo()); break;
+    case 'r': setRotate(!getRotate()); break;
+    case 'w': setWiggle(!getWiggle()); break;
     case 'b': setBlur(!getBlur()); break;
     case 'i': setShowInfo(!getShowInfo()); break;
     case 'l': setShowLogos(!getShowLogos()); break;
