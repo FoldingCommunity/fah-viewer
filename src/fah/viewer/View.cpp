@@ -49,32 +49,23 @@ using namespace cb;
 using namespace FAH;
 
 
-View::View(cb::Options &options) :
-  options(options), width(800), height(600), zoom(1.05), basic(true),
-  wiggle(true), cycle(true), blur(true), modeNumber(4), slot(0), pause(false),
-  rotation(0, 0, 0, 0.999), rotate(true), degreesPerSec(0, 5), turbo(0),
-  skipMultiplier(2), lastFrame(0), currentFrame(0), totalFrames(0),
-  interpSteps(54), fps(16), forward(true), profile("default"), connectTime(0),
-  renderSpeed(1.0 / 32.0), idleSpeed(1.0 / 5.0), showInfo(true),
-  showLogos(true), showHelp(false), showAbout(false), showButtons(true),
-  connectionStatus("None") {
-
-  #ifdef _WIN32
+View::View(cb::Options &options) : options(options) {
+#ifdef _WIN32
   RECT desktop;
   // Returns available screen size without taskbar
   const HWND hDesktop = GetDesktopWindow();
   GetWindowRect(hDesktop, &desktop);
-  if (desktop.bottom > 768 && desktop.right > 1024) {
-    width = 1024;
-    height = 768;
+  if (desktop.bottom < 768 || desktop.right < 1024) {
+    width = 800;
+    height = 600;
   }
-  #endif
+#endif
 
   // Add options
   options.add("connect", "An address and port to connect to in the form: "
               "<host | IP>:<port>")->setDefault("127.0.0.1:36330");
-  options.addTarget("password", password, "A password for accessing the "
-                    "remote client")->setObscured();
+  options.addTarget("password", password, "A password for accessing the remote "
+                    "client")->setObscured();
   options.addTarget("slot", slot, "Slot on the client to view");
   options.add("test", "Load test data")->setDefault(true);
 
@@ -267,7 +258,7 @@ unsigned View::getSlot() {
 
 string View::getStatus() const {
   if (trajectory->empty() && !client.isNull()) {
-    if (info.coreType == 34) return "INCOMPAT";
+    if (info.coreType == 0x22) return "Incompat";
     else if (client->hasLoadableSlot()) return "Loading";
     else if (client->isConnected()) return "Awaiting";
     else return "";
@@ -293,12 +284,14 @@ string View::getFrameDescription() const {
 
 void View::showPopup(const string &name) {
   if (name == "about") {
-    if (showAbout) closePopup();
-    else {closePopup(); showAbout = true;}
+    closePopup();
+    showAbout = true;
+
   } else if (name == "help") {
-    if (showHelp) closePopup();
-    else {closePopup(); showHelp = true;}
-  } else if (name == "home") {return;}     // todo: open F@H homepage
+    closePopup();
+    showHelp = true;
+
+  } else if (name == "home") return; // TODO open F@H homepage
 
   redisplay();
 }
@@ -410,16 +403,16 @@ static uint32_t xorshift_rand() {
 
 
 void View::setTurbo(bool turbo) {
+  this->turbo = turbo;
+
   if (turbo) {
-    this->turbo = true;
-    comingFromLowSpeed = (skipMultiplier == 1);
+    comingFromLowSpeed = skipMultiplier == 1;
     skipMultiplier -= !comingFromLowSpeed;
     renderSpeed = 1.0 / 75.0;
     oldFps = fps;
     fps = 75;
 
   } else {
-    this->turbo = false;
     if (!comingFromLowSpeed) skipMultiplier++;
     renderSpeed = 1.0 / 32.0;
     fps = oldFps;
@@ -428,17 +421,22 @@ void View::setTurbo(bool turbo) {
 
 
 void View::incFPS() {
-  if (turbo) {if (skipMultiplier <= 20) skipMultiplier++;}
-  else if ((fps *= 2) > 32) {fps = 32; skipMultiplier++;}
+  if (turbo) {
+    if (skipMultiplier <= 20) skipMultiplier++;
+
+  } else if (32 < (fps *= 2)) {fps = 32; skipMultiplier++;}
 }
 
 
 void View::decFPS() {
-  if (turbo) {if(skipMultiplier) skipMultiplier--;}
-  else if (fps == 32 || skipMultiplier <= 1) {
+  if (turbo) {
+    if (skipMultiplier) skipMultiplier--;
+
+  } else if (fps == 32 || skipMultiplier <= 1) {
     fps /= 2;
     if (fps < 0.25) this->fps = 0.25;
-  } else --skipMultiplier;
+
+  } else skipMultiplier--;
 }
 
 
@@ -477,24 +475,26 @@ void View::update(bool fast) {
   totalFrames = trajectory->size();
   if (totalFrames <= currentFrame) currentFrame = 0;
   if (!trajectory->empty() && !pause && lastFrame + 1.0 / fps < Timer::now()) {
-   // Rotate X
+    // Rotate X
     if (rotate) {
       if (degreesPerSec.x()) {
-        double angle = (Timer::now() - lastFrame) *
-          -degreesPerSec.x() / 180 * M_PI;
+        double angle =
+          (Timer::now() - lastFrame) * -degreesPerSec.x() / 180 * M_PI;
         QuaternionD delta(AxisAngleD(angle, 1, 0, 0));
-        rotation = QuaternionD(delta.normalize())
-                     .multiply(rotation).normalize();
+
+        rotation =
+          QuaternionD(delta.normalize()) .multiply(rotation).normalize();
         redisplay = true;
       }
 
       // Rotate Y
       if (degreesPerSec.y()) {
-        double angle = (Timer::now() - lastFrame) *
-          degreesPerSec.y() / 180 * M_PI;
+        double angle =
+          (Timer::now() - lastFrame) * degreesPerSec.y() / 180 * M_PI;
         QuaternionD delta(AxisAngleD(angle, 0, 1, 0));
-        rotation = QuaternionD(delta.normalize())
-                     .multiply(rotation).normalize();
+
+        rotation =
+          QuaternionD(delta.normalize()).multiply(rotation).normalize();
         redisplay = true;
       }
     }
@@ -508,7 +508,7 @@ void View::update(bool fast) {
       // Advance frame
       if (forward) {
         currentFrame += skipMultiplier;
-        if (currentFrame >= trajectory->size() - 1) {
+        if (trajectory->size() - 1 <= currentFrame) {
           currentFrame = trajectory->size() - 1;
           forward = false;
         }

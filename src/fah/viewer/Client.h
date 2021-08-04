@@ -33,9 +33,7 @@
 #include "Trajectory.h"
 
 #include <cbang/StdTypes.h>
-
 #include <cbang/socket/Socket.h>
-
 #include <cbang/buffer/MemoryBuffer.h>
 
 #include <vector>
@@ -60,17 +58,15 @@ namespace FAH {
     std::string command;
     std::vector<uint64_t> slots;
     unsigned slot;
-    int64_t currentSlotID;
+    int64_t currentSlotID = -1;
 
   private:
-    state_t state;
-    uint64_t lastConnect;
-    uint64_t lastData;
-    bool waitingForUpdate;
-
-    bool override;
-    bool has_loadable_slot = false;
-    bool has_running_gpu = false;
+    state_t state = STATE_WAITING;
+    uint64_t lastConnect = 0;
+    uint64_t lastData = 0;
+    bool waitingForUpdate = false;
+    bool loadableSlot = false;
+    bool runningGPU = false;
 
     cb::MemoryBuffer buffer;
     unsigned searchOffset;
@@ -90,7 +86,7 @@ namespace FAH {
     void setCommand(const std::string &command) {this->command = command;}
 
     bool isConnected() const {return STATE_CONNECTING < state;}
-    bool hasLoadableSlot() const {return has_loadable_slot;}
+    bool hasLoadableSlot() const {return loadableSlot;}
     state_t getState() const {return state;}
 
     bool setSlot(unsigned slot);

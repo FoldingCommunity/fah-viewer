@@ -64,9 +64,8 @@ using namespace FAH;
 
 Client::Client(const IPAddress &addr, unsigned slot, SimulationInfo &info,
                Trajectory &trajectory, const string &password) :
-  addr(addr), password(password), slot(slot), currentSlotID(-1),
-  state(STATE_WAITING), lastConnect(0), lastData(0), waitingForUpdate(false),
-  info(info), trajectory(trajectory) {
+  addr(addr), password(password), slot(slot), info(info),
+  trajectory(trajectory) {
 
   if (!password.empty()) command = "auth \"" + password + "\"\n";
 
@@ -280,36 +279,37 @@ void Client::processMessage(const char *start, const char *end) {
 
 void Client::handleMessage(const PyON::Message &msg) {
   if (msg.getType() == "slots") {
-
     slots.clear();
-    override = slot;
-
     auto &list = msg.get()->getList();
 
-    for (unsigned i = 0; i < list.size(); i++)
-      if (list.getDict(i)["status"]->getString() != "READY") {
+    for (unsigned i = 0; i < list.size(); i++) {
+      auto &d = list.getDict(i);
+      string status = d["status"]->getString();
+      string type = d["description"]->getString().substr(0,3);
+
+      if (status != "READY") {
         // Any slot that could possibly offer us trajectory data
-        slots.push_back(String::parseU64(list.getDict(i)["id"]->getString()));
+        slots.push_back(String::parseU64(d["id"]->getString()));
 
-        if (list.getDict(i)["status"]->getString() == "RUNNING") {
-          if (list.getDict(i)["description"]->getString().substr(0,3) == "cpu") {
-            if (!override && currentSlotID == -1) slot = slots.size() - 1;
-            has_loadable_slot = true;
-          } else if (!has_loadable_slot) {
-              if (!override && currentSlotID == -1) slot = slots.size() - 1;
-              has_running_gpu = true;
-            }
+        if (status == "RUNNING") {
+          if (type == "cpu") {
+            if (!slot && currentSlotID == -1) slot = slots.size() - 1;
+            loadableSlot = true;
 
-        } else if (!has_loadable_slot && !has_running_gpu)
-            if (list.getDict(i)["description"]->getString()
-                                                  .substr(0,3) == "cpu")
-              if (!override && currentSlotID == -1) slot = slots.size() - 1;
+          } else if (!loadableSlot) {
+            if (!slot && currentSlotID == -1) slot = slots.size() - 1;
+            runningGPU = true;
+          }
+
+        } else if (!loadableSlot && !runningGPU && !slot && type == "cpu" &&
+                   currentSlotID == -1)
+          slot = slots.size() - 1;
       }
+    }
 
     if (!slots.empty()) {
       currentSlotID = slots[slot];
-
-      string cmd = "updates add 2 5 $(simulation-info @SLOT@)\n";
+      const char *cmd = "updates add 2 5 $(simulation-info @SLOT@)\n";
 
       if (command.find(cmd) == string::npos) {
         sendCommands(cmd);
@@ -332,22 +332,14 @@ void Client::handleMessage(const PyON::Message &msg) {
     trajectory.add(positions);
 
   } else if (msg.getType() == "simulation-info") {
-      const JSON::Value& value = *msg.get();
-      auto& dict = value.getDict();
-      uint32_t coreType = (uint32_t)dict["core_type"]->getNumber();
+    const JSON::Value &value = *msg.get();
+    auto &dict = value.getDict();
+    uint32_t coreType = (uint32_t)dict["core_type"]->getNumber();
 
-      switch (coreType) {
-      case 34:
-        info.loadJSON(*msg.get());
-        break;
-      default:
-        if (info.coreType == 0) {
-          string cmd = "updates add 3 5 $(trajectory @SLOT@)\n";
-          sendCommands(cmd);
-        }
-        info.loadJSON(*msg.get());
-        has_loadable_slot = true;
-        break;
-      }
+    if (coreType != 0x22 && !info.coreType)
+      sendCommands("updates add 3 5 $(trajectory @SLOT@)\n");
+
+    info.loadJSON(*msg.get());
+    loadableSlot = coreType != 0x22;
   }
 }

@@ -57,62 +57,60 @@ namespace FAH {
     SimulationInfo info;
     cb::SmartPointer<Protein> protein;
 
-    unsigned width;
-    unsigned height;
-
-    double zoom;
-
-    bool basic;
-    bool wiggle;
-    bool rotate;
-    bool cycle;
-    bool blur;
+    unsigned width  = 1024;
+    unsigned height = 768;
+    double zoom     = 1.05;
+    bool basic      = true;
+    bool wiggle     = true;
+    bool rotate     = true;
+    bool cycle      = true;
+    bool blur       = true;
 
     std::string password;
 
-    unsigned modeNumber;
+    unsigned modeNumber = 4;
     ViewMode mode;
 
-    unsigned slot;
+    unsigned slot = 0;
 
-    bool pause;
-    cb::QuaternionD rotation;
-    cb::Vector2D degreesPerSec;
+    bool pause = true;
+    cb::QuaternionD rotation   = cb::QuaternionD(0, 0, 0, 0.999);
+    cb::Vector2D degreesPerSec = cb::Vector2D(0, 5);
 
-    double lastFrame;
-    int currentFrame;
-    unsigned totalFrames;
-    unsigned interpSteps;
-    double fps;
-    double oldFps;
-    bool forward;
-    bool turbo;
-    unsigned skipMultiplier;
+    double lastFrame        = 0;
+    int currentFrame        = 0;
+    unsigned totalFrames    = 0;
+    unsigned interpSteps    = 54;
+    double fps              = 16;
+    double oldFps           = 0;
+    bool forward            = true;
+    bool turbo              = 0;
+    unsigned skipMultiplier = 2;
     bool comingFromLowSpeed;
 
-    std::string profile;
+    std::string profile = "default";
 
     cb::Timer clientUpdate;
-    uint64_t connectTime;
+    uint64_t connectTime = 0;
 
-    double renderSpeed;
+    double renderSpeed = 1.0 / 32.0;
     cb::Timer renderTimer;
 
-    double idleSpeed;
+    double idleSpeed = 1.0 / 5.0;
     cb::Timer idleTimer;
 
     cb::Vector2D mousePosition;
     std::string buttonHover;
 
-    bool showInfo;
-    bool showLogos;
-    bool showHelp;
-    bool showAbout;
-    bool showButtons;
+    bool showInfo    = true;
+    bool showLogos   = true;
+    bool showHelp    = false;
+    bool showAbout   = false;
+    bool showButtons = true;
 
     cb::SmartPointer<Texture> bgTexture;
 
-    std::string connectionStatus;
+    std::string connectionStatus = "None";
 
   public:
     View(cb::Options &options);
