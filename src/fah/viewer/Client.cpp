@@ -340,6 +340,6 @@ void Client::handleMessage(const PyON::Message &msg) {
       sendCommands("updates add 3 5 $(trajectory @SLOT@)\n");
 
     info.loadJSON(*msg.get());
-    loadableSlot = coreType != 0x22;
+    if (coreType != 0x22) loadableSlot = true;
   }
 }

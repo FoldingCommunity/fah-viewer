@@ -53,43 +53,29 @@ namespace FAH {
 }
 
 
-static void mouseCallback(int button, int state, int x, int y) {
-  ViewerApp::instance().mouse(button, state, x, y);
-}
+namespace {
+  void mouseCB(int button, int state, int x, int y) {
+    ViewerApp::instance().mouse(button, state, x, y);
+  }
 
 
-static void motionCallback(int x, int y) {
-  ViewerApp::instance().motion(x, y);
-}
+  void motionCB(int x, int y) {ViewerApp::instance().motion(x, y);}
 
 
-static void keysCallback(unsigned char key, int x, int y) {
-  ViewerApp::instance().keys(key, x, y);
-}
+  void keysCB(unsigned char key, int x, int y) {
+    ViewerApp::instance().keys(key, x, y);
+  }
 
 
-static void specialCallback(int key, int x, int y) {
-  ViewerApp::instance().special(key, x, y);
-}
+  void specialCB(int key, int x, int y) {
+    ViewerApp::instance().special(key, x, y);
+  }
 
 
-static void renderCallback() {
-  ViewerApp::instance().render();
-}
-
-
-static void resizeCallback(int w, int h) {
-  ViewerApp::instance().resize(w, h);
-}
-
-
-static void visibilityCallback(int state) {
-  ViewerApp::instance().visibility(state);
-}
-
-
-static void idleCallback() {
-  ViewerApp::instance().idle();
+  void renderCB() {ViewerApp::instance().render();}
+  void resizeCB(int w, int h) {ViewerApp::instance().resize(w, h);}
+  void visibilityCB(int state) {ViewerApp::instance().visibility(state);}
+  void idleCB() {ViewerApp::instance().idle();}
 }
 
 
@@ -98,8 +84,7 @@ ViewerApp *ViewerApp::singleton = 0;
 
 ViewerApp::ViewerApp() :
   Application("Folding@home Viewer", ViewerApp::_hasFeature),
-  View(getOptions()), visible(false), lastPause(false), formerWidth(0),
-  formerHeight(0), mouseDragging(false), fullscreen(false), force(false) {
+  View(getOptions()) {
 
   if (singleton) THROW("ViewerApp already exists");
   singleton = this;
@@ -179,15 +164,15 @@ int ViewerApp::init(int argc, char *argv[]) {
   initView(cmdLine.getPositionalArgs());
 
   // Callbacks
-  glutMouseFunc(mouseCallback);
-  glutMotionFunc(motionCallback);
-  glutPassiveMotionFunc(motionCallback);
-  glutKeyboardFunc(keysCallback);
-  glutSpecialFunc(specialCallback);
-  glutDisplayFunc(renderCallback);
-  glutReshapeFunc(resizeCallback);
-  glutVisibilityFunc(visibilityCallback);
-  glutIdleFunc(idleCallback);
+  glutMouseFunc(mouseCB);
+  glutMotionFunc(motionCB);
+  glutPassiveMotionFunc(motionCB);
+  glutKeyboardFunc(keysCB);
+  glutSpecialFunc(specialCB);
+  glutDisplayFunc(renderCB);
+  glutReshapeFunc(resizeCB);
+  glutVisibilityFunc(visibilityCB);
+  glutIdleFunc(idleCB);
 
   return 0;
 }
@@ -266,9 +251,11 @@ void ViewerApp::mouse(int button, int state, int x, int y) {
       case GLUT_DOWN:
         mouseStart = findBallVector(x, y);
         startRotation = getRotation();
-        mouseDragging = true;
-        lastPause = getPause();
-        setPause(true);
+        if (!mouseDragging) {
+          mouseDragging = true;
+          lastPause = getPause();
+          setPause(true);
+        }
         break;
 
       case GLUT_UP:

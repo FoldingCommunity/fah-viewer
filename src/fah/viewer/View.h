@@ -73,12 +73,12 @@ namespace FAH {
 
     unsigned slot = 0;
 
-    bool pause = true;
+    bool pause = false;
     cb::QuaternionD rotation   = cb::QuaternionD(0, 0, 0, 0.999);
     cb::Vector2D degreesPerSec = cb::Vector2D(0, 5);
 
     double lastFrame        = 0;
-    int currentFrame        = 0;
+    unsigned currentFrame   = 0;
     unsigned totalFrames    = 0;
     unsigned interpSteps    = 54;
     double fps              = 16;
@@ -86,7 +86,7 @@ namespace FAH {
     bool forward            = true;
     bool turbo              = 0;
     unsigned skipMultiplier = 2;
-    bool comingFromLowSpeed;
+    bool comingFromLowSpeed = false;
 
     std::string profile = "default";
 

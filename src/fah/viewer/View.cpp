@@ -513,13 +513,11 @@ void View::update(bool fast) {
           forward = false;
         }
 
-      } else {
-        currentFrame -= skipMultiplier;
-        if (currentFrame <= 0) {
-          currentFrame = 0;
-          forward = true;
-        }
-      }
+      } else if (currentFrame <= skipMultiplier) {
+        currentFrame = 0;
+        forward = true;
+
+      } else currentFrame -= skipMultiplier;
 
     } else if (!trajectory->empty()) currentFrame = trajectory->size() - 1;
 

@@ -41,23 +41,23 @@ namespace FAH {
   class ViewerApp : public cb::Application, public View {
     static ViewerApp *singleton;
 
-    bool visible;
-    bool lastPause;
+    bool visible   = false;
+    bool lastPause = false;
 
-    int formerX;
-    int formerY;
-    int formerWidth;
-    int formerHeight;
+    int formerX      = 0;
+    int formerY      = 0;
+    int formerWidth  = 0;
+    int formerHeight = 0;
 
     cb::Vector2D mouseStart2D;
     cb::Vector3D mouseStart;
-    bool mouseDragging;
+    bool mouseDragging = false;
     cb::QuaternionD startRotation;
     cb::Vector3D xAxis;
     cb::Vector3D xOffset;
 
-    bool fullscreen;
-    bool force;
+    bool fullscreen = false;
+    bool force = false;
 
   public:
     ViewerApp();
