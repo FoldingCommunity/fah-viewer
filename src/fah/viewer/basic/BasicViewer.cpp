@@ -451,14 +451,11 @@ void BasicViewer::drawButtons(const View &view) {
   if (!view.getShowButtons()) return;
 
   float spacing = 16;
-  float totalHeight = 4;
   float maxWidth = 0;
 
-  for (unsigned i = 0; i < buttons.size(); i++) {
-    totalHeight += buttons[i]->getHeight();
+  for (unsigned i = 0; i < buttons.size(); i++)
     if (maxWidth < buttons[i]->getWidth())
       maxWidth = buttons[i]->getWidth();
-  }
 
   float xOffset = view.getWidth() - maxWidth - spacing;
   if (xOffset < 0) xOffset = 0;
