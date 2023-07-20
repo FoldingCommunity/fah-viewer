@@ -32,10 +32,10 @@
 #include <fah/viewer/pyon/Object.h>
 
 #include <cbang/SmartPointer.h>
-#include <cbang/StdTypes.h>
 
 #include <iostream>
 #include <string>
+#include <cstdint>
 
 
 namespace FAH {

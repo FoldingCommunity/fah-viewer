@@ -31,7 +31,7 @@
 
 #include <fah/viewer/pyon/Object.h>
 
-#include <cbang/StdTypes.h>
+#include <cstdint>
 
 
 namespace FAH {

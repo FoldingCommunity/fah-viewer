@@ -29,9 +29,9 @@
 
 #pragma once
 
-#include <cbang/StdTypes.h>
-
 #include <string>
+#include <cstdint>
+
 
 namespace FAH {
   class PPM {

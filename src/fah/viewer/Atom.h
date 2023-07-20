@@ -31,11 +31,11 @@
 
 #include <fah/viewer/pyon/Object.h>
 
-#include <cbang/StdTypes.h>
 #include <cbang/geom/Vector.h>
 
 #include <iostream>
 #include <string>
+#include <cstdint>
 
 
 namespace FAH {

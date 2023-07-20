@@ -29,10 +29,9 @@
 
 #pragma once
 
-#include <cbang/StdTypes.h>
-
 #include <iostream>
 #include <string>
+#include <cstdint>
 
 #define FAH_PYON_MAGIC "PyON"
 #define FAH_PYON_VERSION 1

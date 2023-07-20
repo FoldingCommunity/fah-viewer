@@ -32,11 +32,11 @@
 #include "SimulationInfo.h"
 #include "Trajectory.h"
 
-#include <cbang/StdTypes.h>
 #include <cbang/socket/Socket.h>
 #include <cbang/buffer/MemoryBuffer.h>
 
 #include <vector>
+#include <cstdint>
 
 
 namespace FAH {
