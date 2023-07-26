@@ -80,7 +80,6 @@ Uniform *Scene::findUniform(const string &name, uniform_t type) {
  * @param filename is the name for the file where we get the data
  */
 void Scene::loadData(const string &filename) {
-  int currentLine = 0;
   recentProgramHandle = -1;
 
   const Resource *data = FAH::Viewer::resource0.find(filename);
@@ -99,8 +98,6 @@ void Scene::loadData(const string &filename) {
 
     getline(in, lineString);
     stringstream line(lineString);
-
-    ++currentLine;
 
     line >> item;
 
