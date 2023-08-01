@@ -40,7 +40,7 @@
 
 #include <fah/viewer/GL.h>
 
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 using namespace cb;

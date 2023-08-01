@@ -34,7 +34,7 @@
 #include <cbang/geom/Vector.h>
 #include <cbang/SmartPointer.h>
 
-#include <math.h>
+#include <cmath>
 
 using namespace cb;
 using namespace FAH;

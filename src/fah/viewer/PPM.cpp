@@ -35,7 +35,7 @@
 
 #include <cbang/os/SystemUtilities.h>
 
-#include <ctype.h>
+#include <cctype>
 
 using namespace std;
 using namespace cb;

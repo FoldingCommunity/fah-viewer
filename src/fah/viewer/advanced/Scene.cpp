@@ -44,7 +44,7 @@
 #include <sstream>
 #include <string>
 
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 using namespace cb;

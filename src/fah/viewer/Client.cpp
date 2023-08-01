@@ -42,7 +42,7 @@
 #include <cbang/iostream/ArrayDevice.h>
 #include <cbang/log/Logger.h>
 
-#include <cbang/buffer/BufferDevice.h>
+#include <cbang/io/BufferDevice.h>
 
 #include <cbang/json/List.h>
 #include <cbang/json/Dict.h>

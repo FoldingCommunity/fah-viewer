@@ -35,7 +35,7 @@
 #include <fah/viewer/GL.h>
 #include <fah/viewer/PPM.h>
 
-#include <string.h>
+#include <cstring>
 
 using namespace std;
 using namespace cb;

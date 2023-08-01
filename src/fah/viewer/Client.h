@@ -33,7 +33,7 @@
 #include "Trajectory.h"
 
 #include <cbang/socket/Socket.h>
-#include <cbang/buffer/MemoryBuffer.h>
+#include <cbang/io/MemoryBuffer.h>
 
 #include <vector>
 #include <cstdint>

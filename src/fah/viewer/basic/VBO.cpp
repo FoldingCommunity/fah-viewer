@@ -31,7 +31,7 @@
 
 #include <fah/viewer/GL.h>
 
-#include <string.h>
+#include <cstring>
 
 using namespace cb;
 using namespace FAH;
